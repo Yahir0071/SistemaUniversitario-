@@ -22,7 +22,7 @@ Para clonar y ejecutar este proyecto en tu entorno local, sigue estos pasos:
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com
+git clone [https://github.com](https://github.com/Yahir0071/SistemaUniversitario-.git)
 
 # Entrar a la carpeta del proyecto
 cd SistemaUniversitario-
