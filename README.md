@@ -13,9 +13,9 @@ Este sistema es una aplicación diseñada para gestionar procesos universitarios
 *   **Interfaz Intuitiva:** Navegación amigable a través de la consola/menú.
 
 ## 🛠️ Tecnologías Utilizadas
-*   **Lenguaje:** Java / Python / C# *(Reemplaza por tu lenguaje)*
+*   **Lenguaje:** Java / algo de CSS
 *   **Herramientas:** Git, GitHub
-*   **Entorno de Desarrollo (IDE):** VS Code / IntelliJ / NetBeans
+*   **Entorno de Desarrollo (IDE):** VS Code / IntelliJ 
 
 ## 💻 Instrucciones de Ejecución
 Para clonar y ejecutar este proyecto en tu entorno local, sigue estos pasos:
