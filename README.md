@@ -6,11 +6,11 @@
 ## Integrantes del Grupo
 | N° | Nombre Completo | Código UTP | Rol / Responsabilidad en Avance 1 |
 |:--:|:----------------|:----------:|:----------------------------------|
-| 1  | [Nombre Integrante 1] | UXXXXXXXX | `core-js` (Validadores, Modelos, Estadísticas y Tests) |
-| 2  | [Nombre Integrante 2] | UXXXXXXXX | `api-mock` (db.json, endpoints y json-server) |
-| 3  | [Nombre Integrante 3] | UXXXXXXXX | `angular-admin` (Routing, Servicios HttpClient, Interfaces y sync-core) |
-| 4  | [Nombre Integrante 4] | UXXXXXXXX | `angular-admin` (Componentes Catálogo: List, Form, Detail y validaciones) |
-| 5  | [Nombre Integrante 5] | UXXXXXXXX | `angular-admin` (Reservas, Pipes, Directivas, Bootstrap y Documentación) |
+| 1  | Yahir Anthony Huaira Yauri | U24253852 | `core-js` (Validadores, Modelos, Estadísticas) y Catálogo Angular |
+| 2  | Angello Gabriel Enciso Abril | U24257462 | `api-mock` (db.json, endpoints y json-server) y Postman |
+| 3  | Mathias Sebastián Loreto Peñaranda | U24223538 | `angular-admin` (Routing, Servicios HttpClient, Interfaces) |
+| 4  | Esaul Ronaldo Chancan Moreno | U24233179 | `angular-admin` (Reservas, Pipes, Directivas y Bootstrap) |
+| 5  | Cuack | - | Documentación y Pruebas Generales (QA) |
 
 ---
 
