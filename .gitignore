@@ -1,0 +1,26 @@
+# Dependencias (NUNCA subir a git)
+node_modules/
+*/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Compilados de Angular
+.angular/
+dist/
+*/dist/
+out-tsc/
+*/out-tsc/
+bazel-out/
+
+# Entornos y temporales
+.env
+.env.*.local
+tmp/
+*/tmp/
+
+# Archivos de sistema y editores
+.DS_Store
+Thumbs.db
+.idea/
+*.sublime-workspace
