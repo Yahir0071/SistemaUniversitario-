@@ -1,0 +1,234 @@
+{
+  "info": {
+    "name": "CampusHub - Avance 1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET laboratorios",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/laboratorios",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "laboratorios"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "GET laboratorios por sede",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/laboratorios?sede=Lima%20Sur",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "laboratorios"
+          ],
+          "query": [
+            {
+              "key": "sede",
+              "value": "Lima%20Sur"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET laboratorios busqueda",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/laboratorios?q=Lab",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "laboratorios"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "Lab"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET laboratorio detalle",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/laboratorios/1",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "laboratorios",
+            "1"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "POST laboratorio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/laboratorios",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "laboratorios"
+          ],
+          "query": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Lab Z-999\",\n  \"sede\": \"Lima Centro\",\n  \"capacidad\": 25,\n  \"equipos\": [\n    \"PC i5\"\n  ],\n  \"estado\": \"disponible\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PUT laboratorio",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/laboratorios/1",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "laboratorios",
+            "1"
+          ],
+          "query": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 1,\n  \"nombre\": \"Lab Z-999\",\n  \"sede\": \"Lima Centro\",\n  \"capacidad\": 25,\n  \"equipos\": [\n    \"PC i5\"\n  ],\n  \"estado\": \"disponible\"\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE laboratorio",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/laboratorios/9",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "laboratorios",
+            "9"
+          ],
+          "query": []
+        }
+      }
+    },
+    {
+      "name": "GET reservas de usuario",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/reservas?usuarioId=3",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "reservas"
+          ],
+          "query": [
+            {
+              "key": "usuarioId",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "POST reserva",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/reservas",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "reservas"
+          ],
+          "query": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"RES-0021\",\n  \"laboratorioId\": 1,\n  \"usuarioId\": 3,\n  \"fecha\": \"2026-11-25\",\n  \"horaInicio\": \"08:00\",\n  \"horaFin\": \"10:00\",\n  \"motivo\": \"Prueba\",\n  \"estado\": \"pendiente\",\n  \"creadoEn\": \"2026-11-02T12:34:42.930Z\"\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE reserva",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/reservas/20",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "reservas",
+            "20"
+          ],
+          "query": []
+        }
+      }
+    }
+  ]
+}

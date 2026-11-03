@@ -1,0 +1,400 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Ana Torres",
+      "correo": "admin1@utp.edu.pe",
+      "codigo": "A00000001",
+      "rol": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": 2,
+      "nombre": "Marco Rojas",
+      "correo": "admin2@utp.edu.pe",
+      "codigo": "A00000002",
+      "rol": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": 3,
+      "nombre": "Luis Quispe",
+      "correo": "u20231234@utp.edu.pe",
+      "codigo": "U20231234",
+      "rol": "estudiante",
+      "password": "est123"
+    },
+    {
+      "id": 4,
+      "nombre": "María Flores",
+      "correo": "u20235678@utp.edu.pe",
+      "codigo": "U20235678",
+      "rol": "estudiante",
+      "password": "est123"
+    },
+    {
+      "id": 5,
+      "nombre": "Carlos Ramos",
+      "correo": "u20239012@utp.edu.pe",
+      "codigo": "U20239012",
+      "rol": "estudiante",
+      "password": "est123"
+    },
+    {
+      "id": 6,
+      "nombre": "Sofía Vega",
+      "correo": "u20233456@utp.edu.pe",
+      "codigo": "U20233456",
+      "rol": "estudiante",
+      "password": "est123"
+    },
+    {
+      "id": 7,
+      "nombre": "Diego Paredes",
+      "correo": "u20237890@utp.edu.pe",
+      "codigo": "U20237890",
+      "rol": "estudiante",
+      "password": "est123"
+    },
+    {
+      "id": 8,
+      "nombre": "Lucía Campos",
+      "correo": "u20232345@utp.edu.pe",
+      "codigo": "U20232345",
+      "rol": "estudiante",
+      "password": "est123"
+    }
+  ],
+  "laboratorios": [
+    {
+      "id": 1,
+      "nombre": "Lab A-301",
+      "sede": "Lima Centro",
+      "capacidad": 30,
+      "equipos": [
+        "PC i7",
+        "Proyector"
+      ],
+      "estado": "disponible"
+    },
+    {
+      "id": 2,
+      "nombre": "Lab B-205",
+      "sede": "Lima Sur",
+      "capacidad": 24,
+      "equipos": [
+        "PC i5",
+        "Arduino"
+      ],
+      "estado": "mantenimiento"
+    },
+    {
+      "id": 3,
+      "nombre": "Lab C-102",
+      "sede": "Lima Norte",
+      "capacidad": 40,
+      "equipos": [
+        "PC i7",
+        "Pizarra digital"
+      ],
+      "estado": "disponible"
+    },
+    {
+      "id": 4,
+      "nombre": "Lab A-305",
+      "sede": "Lima Centro",
+      "capacidad": 20,
+      "equipos": [
+        "Mac Mini",
+        "Proyector"
+      ],
+      "estado": "disponible"
+    },
+    {
+      "id": 5,
+      "nombre": "Lab D-210",
+      "sede": "Arequipa",
+      "capacidad": 32,
+      "equipos": [
+        "PC i5",
+        "Switch Cisco"
+      ],
+      "estado": "disponible"
+    },
+    {
+      "id": 6,
+      "nombre": "Lab B-110",
+      "sede": "Lima Sur",
+      "capacidad": 18,
+      "equipos": [
+        "Raspberry Pi",
+        "Sensores IoT"
+      ],
+      "estado": "mantenimiento"
+    },
+    {
+      "id": 7,
+      "nombre": "Lab C-204",
+      "sede": "Lima Norte",
+      "capacidad": 50,
+      "equipos": [
+        "PC i9",
+        "GPU RTX"
+      ],
+      "estado": "disponible"
+    },
+    {
+      "id": 8,
+      "nombre": "Lab E-001",
+      "sede": "Arequipa",
+      "capacidad": 28,
+      "equipos": [
+        "PC i7",
+        "Kit de redes"
+      ],
+      "estado": "disponible"
+    }
+  ],
+  "reservas": [
+    {
+      "id": 1,
+      "codigo": "RES-0001",
+      "laboratorioId": 1,
+      "usuarioId": 3,
+      "fecha": "2026-11-16",
+      "horaInicio": "08:00",
+      "horaFin": "10:00",
+      "motivo": "Práctica de React",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "codigo": "RES-0002",
+      "laboratorioId": 2,
+      "usuarioId": 4,
+      "fecha": "2026-11-16",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Taller de Angular",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-11T10:00:00Z"
+    },
+    {
+      "id": 3,
+      "codigo": "RES-0003",
+      "laboratorioId": 3,
+      "usuarioId": 5,
+      "fecha": "2026-11-16",
+      "horaInicio": "14:00",
+      "horaFin": "16:00",
+      "motivo": "Examen práctico",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-12T10:00:00Z"
+    },
+    {
+      "id": 4,
+      "codigo": "RES-0004",
+      "laboratorioId": 4,
+      "usuarioId": 6,
+      "fecha": "2026-11-16",
+      "horaInicio": "16:00",
+      "horaFin": "18:00",
+      "motivo": "Proyecto integral",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-13T10:00:00Z"
+    },
+    {
+      "id": 5,
+      "codigo": "RES-0005",
+      "laboratorioId": 5,
+      "usuarioId": 7,
+      "fecha": "2026-11-16",
+      "horaInicio": "08:00",
+      "horaFin": "10:00",
+      "motivo": "Clase de Node.js",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-14T10:00:00Z"
+    },
+    {
+      "id": 6,
+      "codigo": "RES-0006",
+      "laboratorioId": 6,
+      "usuarioId": 8,
+      "fecha": "2026-11-16",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Asesoría de tesis",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T10:00:00Z"
+    },
+    {
+      "id": 7,
+      "codigo": "RES-0007",
+      "laboratorioId": 7,
+      "usuarioId": 3,
+      "fecha": "2026-11-16",
+      "horaInicio": "14:00",
+      "horaFin": "16:00",
+      "motivo": "Práctica de Vue",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-11T10:00:00Z"
+    },
+    {
+      "id": 8,
+      "codigo": "RES-0008",
+      "laboratorioId": 8,
+      "usuarioId": 4,
+      "fecha": "2026-11-16",
+      "horaInicio": "16:00",
+      "horaFin": "18:00",
+      "motivo": "Laboratorio de Express",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-12T10:00:00Z"
+    },
+    {
+      "id": 9,
+      "codigo": "RES-0009",
+      "laboratorioId": 1,
+      "usuarioId": 5,
+      "fecha": "2026-11-17",
+      "horaInicio": "08:00",
+      "horaFin": "10:00",
+      "motivo": "Práctica de React",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-13T10:00:00Z"
+    },
+    {
+      "id": 10,
+      "codigo": "RES-0010",
+      "laboratorioId": 2,
+      "usuarioId": 6,
+      "fecha": "2026-11-17",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Taller de Angular",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-14T10:00:00Z"
+    },
+    {
+      "id": 11,
+      "codigo": "RES-0011",
+      "laboratorioId": 3,
+      "usuarioId": 7,
+      "fecha": "2026-11-17",
+      "horaInicio": "14:00",
+      "horaFin": "16:00",
+      "motivo": "Examen práctico",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-10T10:00:00Z"
+    },
+    {
+      "id": 12,
+      "codigo": "RES-0012",
+      "laboratorioId": 4,
+      "usuarioId": 8,
+      "fecha": "2026-11-17",
+      "horaInicio": "16:00",
+      "horaFin": "18:00",
+      "motivo": "Proyecto integral",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-11T10:00:00Z"
+    },
+    {
+      "id": 13,
+      "codigo": "RES-0013",
+      "laboratorioId": 5,
+      "usuarioId": 3,
+      "fecha": "2026-11-17",
+      "horaInicio": "08:00",
+      "horaFin": "10:00",
+      "motivo": "Clase de Node.js",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-12T10:00:00Z"
+    },
+    {
+      "id": 14,
+      "codigo": "RES-0014",
+      "laboratorioId": 6,
+      "usuarioId": 4,
+      "fecha": "2026-11-17",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Asesoría de tesis",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-13T10:00:00Z"
+    },
+    {
+      "id": 15,
+      "codigo": "RES-0015",
+      "laboratorioId": 7,
+      "usuarioId": 5,
+      "fecha": "2026-11-17",
+      "horaInicio": "14:00",
+      "horaFin": "16:00",
+      "motivo": "Práctica de Vue",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-14T10:00:00Z"
+    },
+    {
+      "id": 16,
+      "codigo": "RES-0016",
+      "laboratorioId": 8,
+      "usuarioId": 6,
+      "fecha": "2026-11-17",
+      "horaInicio": "16:00",
+      "horaFin": "18:00",
+      "motivo": "Laboratorio de Express",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-10T10:00:00Z"
+    },
+    {
+      "id": 17,
+      "codigo": "RES-0017",
+      "laboratorioId": 1,
+      "usuarioId": 7,
+      "fecha": "2026-11-18",
+      "horaInicio": "08:00",
+      "horaFin": "10:00",
+      "motivo": "Práctica de React",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-11T10:00:00Z"
+    },
+    {
+      "id": 18,
+      "codigo": "RES-0018",
+      "laboratorioId": 2,
+      "usuarioId": 8,
+      "fecha": "2026-11-18",
+      "horaInicio": "10:00",
+      "horaFin": "12:00",
+      "motivo": "Taller de Angular",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-12T10:00:00Z"
+    },
+    {
+      "id": 19,
+      "codigo": "RES-0019",
+      "laboratorioId": 3,
+      "usuarioId": 3,
+      "fecha": "2026-11-18",
+      "horaInicio": "14:00",
+      "horaFin": "16:00",
+      "motivo": "Examen práctico",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-13T10:00:00Z"
+    },
+    {
+      "id": 20,
+      "codigo": "RES-0020",
+      "laboratorioId": 4,
+      "usuarioId": 4,
+      "fecha": "2026-11-18",
+      "horaInicio": "16:00",
+      "horaFin": "18:00",
+      "motivo": "Proyecto integral",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-14T10:00:00Z"
+    }
+  ]
+}
