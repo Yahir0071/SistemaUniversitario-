@@ -10,7 +10,7 @@
 | 2  | Angello Gabriel Enciso Abril | U24257462 | `api-mock` (db.json, endpoints json-server) y Colección Postman |
 | 3  | Mathias Sebastián Loreto Peñaranda | U24223538 | `angular-admin` (Routing, Servicios Plato/Pedido, Interfaces) |
 | 4  | Esaul Ronaldo Chancan Moreno | U24233179 | `angular-admin` (Gestión de Pedidos, Pipes, Directivas y UI Bootstrap) |
-| 5  | Jeferson Alonso Almerco Ramirez | U23249977 | Documentación y Pruebas Generales (QA) |
+| 5  | Jeferson Alonso Almerco Ramirez | U23249977 | `readme.md` Documentación y Pruebas Generales (QA) |
 
 ---
 
