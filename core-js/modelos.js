@@ -1,9 +1,4 @@
-// Clases del dominio (S4)
-const aMinutos = (hhmm) => {
-  const [h, m] = hhmm.split(':').map(Number);
-  return h * 60 + m;
-};
-
+// Clases del dominio FoodCampus (S4)
 export class Usuario {
   constructor({ id, nombre, correo, codigo, rol = 'estudiante', password }) {
     Object.assign(this, { id, nombre, correo, codigo, rol, password });
@@ -20,38 +15,43 @@ export class Usuario {
   }
 }
 
-export class Laboratorio {
-  constructor({ id, nombre, sede, capacidad, equipos = [], estado = 'disponible' }) {
-    Object.assign(this, { id, nombre, sede, capacidad, equipos, estado });
+export class Plato {
+  constructor({ id, nombre, categoria, precio, ingredientes = [], estado = 'disponible' }) {
+    Object.assign(this, { id, nombre, categoria, precio: Number(precio), ingredientes, estado });
   }
   get estaDisponible() {
     return this.estado === 'disponible';
   }
-  tieneEquipo(nombre) {
-    return this.equipos.some((e) => e.toLowerCase().includes(nombre.toLowerCase()));
+  tieneIngrediente(nombre) {
+    return this.ingredientes.some((ing) => ing.toLowerCase().includes(nombre.toLowerCase()));
   }
   resumen() {
-    return `${this.nombre} (${this.sede}) - ${this.capacidad} puestos`;
+    return `${this.nombre} (${this.categoria}) - S/ ${this.precio.toFixed(2)}`;
   }
 }
 
-export class Reserva {
-  constructor({ id, codigo, laboratorioId, usuarioId, fecha, horaInicio, horaFin, motivo = '', estado = 'pendiente', creadoEn }) {
-    Object.assign(this, { id, codigo, laboratorioId, usuarioId, fecha, horaInicio, horaFin, motivo, estado, creadoEn });
+export class Pedido {
+  constructor({ id, codigo, platoId, usuarioId, fecha, cantidad = 1, precioUnitario = 0, notas = '', estado = 'pendiente', creadoEn }) {
+    Object.assign(this, {
+      id,
+      codigo,
+      platoId,
+      usuarioId,
+      fecha,
+      cantidad: Number(cantidad),
+      precioUnitario: Number(precioUnitario),
+      notas,
+      estado,
+      creadoEn,
+    });
   }
-  duracionHoras() {
-    return (aMinutos(this.horaFin) - aMinutos(this.horaInicio)) / 60;
+  get precioTotal() {
+    return Math.round(this.cantidad * this.precioUnitario * 100) / 100;
   }
-  // Se cruzan si es el mismo laboratorio, el mismo día y los intervalos se solapan
-  seCruzaCon(otra) {
-    return (
-      this.laboratorioId === otra.laboratorioId &&
-      this.fecha === otra.fecha &&
-      aMinutos(this.horaInicio) < aMinutos(otra.horaFin) &&
-      aMinutos(otra.horaInicio) < aMinutos(this.horaFin)
-    );
-  }
-  get estaActiva() {
+  get estaActivo() {
     return this.estado !== 'rechazada';
+  }
+  resumen() {
+    return `${this.codigo}: ${this.cantidad}x Plato #${this.platoId} - S/ ${this.precioTotal.toFixed(2)}`;
   }
 }

@@ -7,13 +7,13 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   template: `
     <nav class="navbar navbar-expand navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" routerLink="/laboratorios">🎓 CampusHub Admin</a>
+        <a class="navbar-brand" routerLink="/platos">🍔 FoodCampus Admin</a>
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/laboratorios" routerLinkActive="active">Laboratorios</a>
+            <a class="nav-link" routerLink="/platos" routerLinkActive="active">Menú de Platos</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/reservas" routerLinkActive="active">Reservas</a>
+            <a class="nav-link" routerLink="/pedidos" routerLinkActive="active">Pedidos</a>
           </li>
         </ul>
       </div>

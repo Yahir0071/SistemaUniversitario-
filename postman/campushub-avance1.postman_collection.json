@@ -1,94 +1,77 @@
 {
   "info": {
-    "name": "CampusHub - Avance 1",
+    "name": "FoodCampus - Avance 1",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "GET laboratorios",
+      "name": "GET platos",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:3000/laboratorios",
-          "host": [
-            "localhost"
-          ],
+          "raw": "http://localhost:3000/platos",
+          "host": ["localhost"],
           "port": "3000",
-          "path": [
-            "laboratorios"
-          ],
+          "path": ["platos"],
           "query": []
         }
       }
     },
     {
-      "name": "GET laboratorios por sede",
+      "name": "GET platos por categoria",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:3000/laboratorios?sede=Lima%20Sur",
-          "host": [
-            "localhost"
-          ],
+          "raw": "http://localhost:3000/platos?categoria=Almuerzos",
+          "host": ["localhost"],
           "port": "3000",
-          "path": [
-            "laboratorios"
-          ],
+          "path": ["platos"],
           "query": [
             {
-              "key": "sede",
-              "value": "Lima%20Sur"
+              "key": "categoria",
+              "value": "Almuerzos"
             }
           ]
         }
       }
     },
     {
-      "name": "GET laboratorios busqueda",
+      "name": "GET platos busqueda",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:3000/laboratorios?q=Lab",
-          "host": [
-            "localhost"
-          ],
+          "raw": "http://localhost:3000/platos?q=Lomo",
+          "host": ["localhost"],
           "port": "3000",
-          "path": [
-            "laboratorios"
-          ],
+          "path": ["platos"],
           "query": [
             {
               "key": "q",
-              "value": "Lab"
+              "value": "Lomo"
             }
           ]
         }
       }
     },
     {
-      "name": "GET laboratorio detalle",
+      "name": "GET plato detalle",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:3000/laboratorios/1",
-          "host": [
-            "localhost"
-          ],
+          "raw": "http://localhost:3000/platos/1",
+          "host": ["localhost"],
           "port": "3000",
-          "path": [
-            "laboratorios",
-            "1"
-          ],
+          "path": ["platos", "1"],
           "query": []
         }
       }
     },
     {
-      "name": "POST laboratorio",
+      "name": "POST plato",
       "request": {
         "method": "POST",
         "header": [
@@ -98,24 +81,20 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/laboratorios",
-          "host": [
-            "localhost"
-          ],
+          "raw": "http://localhost:3000/platos",
+          "host": ["localhost"],
           "port": "3000",
-          "path": [
-            "laboratorios"
-          ],
+          "path": ["platos"],
           "query": []
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"nombre\": \"Lab Z-999\",\n  \"sede\": \"Lima Centro\",\n  \"capacidad\": 25,\n  \"equipos\": [\n    \"PC i5\"\n  ],\n  \"estado\": \"disponible\"\n}"
+          "raw": "{\n  \"nombre\": \"Tallarines Verdes con Bistec\",\n  \"categoria\": \"Almuerzos\",\n  \"precio\": 16.0,\n  \"ingredientes\": [\n    \"Tallarines\",\n    \"Salsa al pesto\",\n    \"Bistec de res\"\n  ],\n  \"estado\": \"disponible\"\n}"
         }
       }
     },
     {
-      "name": "PUT laboratorio",
+      "name": "PUT plato",
       "request": {
         "method": "PUT",
         "header": [
@@ -125,56 +104,42 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/laboratorios/1",
-          "host": [
-            "localhost"
-          ],
+          "raw": "http://localhost:3000/platos/1",
+          "host": ["localhost"],
           "port": "3000",
-          "path": [
-            "laboratorios",
-            "1"
-          ],
+          "path": ["platos", "1"],
           "query": []
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id\": 1,\n  \"nombre\": \"Lab Z-999\",\n  \"sede\": \"Lima Centro\",\n  \"capacidad\": 25,\n  \"equipos\": [\n    \"PC i5\"\n  ],\n  \"estado\": \"disponible\"\n}"
+          "raw": "{\n  \"id\": 1,\n  \"nombre\": \"Lomo Saltado Criollo Especial\",\n  \"categoria\": \"Almuerzos\",\n  \"precio\": 16.5,\n  \"ingredientes\": [\n    \"Lomo de res\",\n    \"Papas fritas\",\n    \"Arroz blanco\"\n  ],\n  \"estado\": \"disponible\"\n}"
         }
       }
     },
     {
-      "name": "DELETE laboratorio",
+      "name": "DELETE plato",
       "request": {
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "http://localhost:3000/laboratorios/9",
-          "host": [
-            "localhost"
-          ],
+          "raw": "http://localhost:3000/platos/8",
+          "host": ["localhost"],
           "port": "3000",
-          "path": [
-            "laboratorios",
-            "9"
-          ],
+          "path": ["platos", "8"],
           "query": []
         }
       }
     },
     {
-      "name": "GET reservas de usuario",
+      "name": "GET pedidos de usuario",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:3000/reservas?usuarioId=3",
-          "host": [
-            "localhost"
-          ],
+          "raw": "http://localhost:3000/pedidos?usuarioId=3",
+          "host": ["localhost"],
           "port": "3000",
-          "path": [
-            "reservas"
-          ],
+          "path": ["pedidos"],
           "query": [
             {
               "key": "usuarioId",
@@ -185,7 +150,7 @@
       }
     },
     {
-      "name": "POST reserva",
+      "name": "POST pedido",
       "request": {
         "method": "POST",
         "header": [
@@ -195,37 +160,28 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/reservas",
-          "host": [
-            "localhost"
-          ],
+          "raw": "http://localhost:3000/pedidos",
+          "host": ["localhost"],
           "port": "3000",
-          "path": [
-            "reservas"
-          ],
+          "path": ["pedidos"],
           "query": []
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"codigo\": \"RES-0021\",\n  \"laboratorioId\": 1,\n  \"usuarioId\": 3,\n  \"fecha\": \"2026-11-25\",\n  \"horaInicio\": \"08:00\",\n  \"horaFin\": \"10:00\",\n  \"motivo\": \"Prueba\",\n  \"estado\": \"pendiente\",\n  \"creadoEn\": \"2026-11-02T12:34:42.930Z\"\n}"
+          "raw": "{\n  \"codigo\": \"PED-0021\",\n  \"platoId\": 1,\n  \"usuarioId\": 3,\n  \"fecha\": \"2026-11-25\",\n  \"cantidad\": 2,\n  \"precioUnitario\": 15.5,\n  \"precioTotal\": 31.0,\n  \"notas\": \"Sin cebolla\",\n  \"estado\": \"pendiente\",\n  \"creadoEn\": \"2026-11-05T12:00:00.000Z\"\n}"
         }
       }
     },
     {
-      "name": "DELETE reserva",
+      "name": "DELETE pedido",
       "request": {
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "http://localhost:3000/reservas/20",
-          "host": [
-            "localhost"
-          ],
+          "raw": "http://localhost:3000/pedidos/20",
+          "host": ["localhost"],
           "port": "3000",
-          "path": [
-            "reservas",
-            "20"
-          ],
+          "path": ["pedidos", "20"],
           "query": []
         }
       }

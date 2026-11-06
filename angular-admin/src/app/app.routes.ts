@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
-import { LaboratorioList } from './components/laboratorio-list/laboratorio-list';
-import { LaboratorioForm } from './components/laboratorio-form/laboratorio-form';
-import { LaboratorioDetail } from './components/laboratorio-detail/laboratorio-detail';
-import { ReservaList } from './components/reserva-list/reserva-list';
+import { PlatoList } from './components/plato-list/plato-list';
+import { PlatoForm } from './components/plato-form/plato-form';
+import { PlatoDetail } from './components/plato-detail/plato-detail';
+import { PedidoList } from './components/pedido-list/pedido-list';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'laboratorios', pathMatch: 'full' },
-  { path: 'laboratorios', component: LaboratorioList },
-  { path: 'laboratorios/nuevo', component: LaboratorioForm },       // antes de :id
-  { path: 'laboratorios/:id/editar', component: LaboratorioForm },
-  { path: 'laboratorios/:id', component: LaboratorioDetail },
-  { path: 'reservas', component: ReservaList },
-  { path: '**', redirectTo: 'laboratorios' },
+  { path: '', redirectTo: 'platos', pathMatch: 'full' },
+  { path: 'platos', component: PlatoList },
+  { path: 'platos/nuevo', component: PlatoForm },
+  { path: 'platos/:id/editar', component: PlatoForm },
+  { path: 'platos/:id', component: PlatoDetail },
+  { path: 'pedidos', component: PedidoList },
+  { path: '**', redirectTo: 'platos' },
 ];

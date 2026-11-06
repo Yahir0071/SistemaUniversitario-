@@ -1,39 +1,43 @@
-// map / filter / reduce, Map y Set (S2, S4, S5)
-import { Reserva } from './modelos.js';
+// map / filter / reduce, Map y Set para FoodCampus (S2, S4, S5)
+import { Pedido } from './modelos.js';
 
 // reduce con valor inicial objeto: el acumulador es un contador por estado
-export const reservasPorEstado = (reservas) =>
-  reservas.reduce(
-    (acc, r) => ({ ...acc, [r.estado]: (acc[r.estado] ?? 0) + 1 }),
+export const pedidosPorEstado = (pedidos) =>
+  pedidos.reduce(
+    (acc, p) => ({ ...acc, [p.estado]: (acc[p.estado] ?? 0) + 1 }),
     { pendiente: 0, aprobada: 0, rechazada: 0 }
   );
 
-// Map laboratorioId -> horas ocupadas (no cuenta las rechazadas)
-export const ocupacionPorLaboratorio = (reservas) => {
+// Map platoId -> total recaudado en S/. (no cuenta los pedidos rechazados)
+export const ventasPorPlato = (pedidos) => {
   const mapa = new Map();
-  reservas
-    .filter((r) => r.estado !== 'rechazada')
-    .forEach((r) => {
-      const horas = new Reserva(r).duracionHoras();
-      mapa.set(r.laboratorioId, (mapa.get(r.laboratorioId) ?? 0) + horas);
+  pedidos
+    .filter((p) => p.estado !== 'rechazada')
+    .forEach((p) => {
+      const total = new Pedido(p).precioTotal;
+      mapa.set(p.platoId, Math.round(((mapa.get(p.platoId) ?? 0) + total) * 100) / 100);
     });
   return mapa;
 };
 
-// Set elimina duplicados; spread lo vuelve arreglo
-export const sedesUnicas = (laboratorios) => [...new Set(laboratorios.map((l) => l.sede))];
+// Set elimina categorías duplicadas; spread lo vuelve arreglo
+export const categoriasUnicas = (platos) => [...new Set(platos.map((p) => p.categoria))];
 
-// Ranking: cuenta con Map y ordena con sort
-export const rankingLaboratorios = (reservas) => {
+// Ranking: cuenta cantidad total pedida con Map y ordena con sort descendente
+export const rankingPlatos = (pedidos) => {
   const conteo = new Map();
-  for (const r of reservas) conteo.set(r.laboratorioId, (conteo.get(r.laboratorioId) ?? 0) + 1);
+  for (const p of pedidos) {
+    if (p.estado !== 'rechazada') {
+      conteo.set(p.platoId, (conteo.get(p.platoId) ?? 0) + p.cantidad);
+    }
+  }
   return [...conteo]
-    .map(([laboratorioId, total]) => ({ laboratorioId, total }))
-    .sort((a, b) => b.total - a.total || a.laboratorioId - b.laboratorioId);
+    .map(([platoId, cantidad]) => ({ platoId, cantidad }))
+    .sort((a, b) => b.cantidad - a.cantidad || a.platoId - b.platoId);
 };
 
-// Closure: `n` queda privado y persiste entre llamadas
-export const crearGeneradorCodigos = (prefijo = 'RES', ultimo = 0) => {
+// Closure: `n` queda privado en el ámbito léxico y persiste entre llamadas
+export const crearGeneradorCodigos = (prefijo = 'PED', ultimo = 0) => {
   let n = ultimo;
   return () => `${prefijo}-${String(++n).padStart(4, '0')}`;
 };

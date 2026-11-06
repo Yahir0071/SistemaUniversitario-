@@ -23,5 +23,10 @@ tmp/
 .DS_Store
 Thumbs.db
 .idea/
+.vscode/
 *.sublime-workspace
 *.pdf
+
+# Herramientas de análisis locales
+graphify-out/
+
