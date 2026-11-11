@@ -1,0 +1,12 @@
+body {
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.card-plato {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-plato:hover {
+  transform: translateY(-2px);
+}
