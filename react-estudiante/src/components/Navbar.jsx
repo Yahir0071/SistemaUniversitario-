@@ -12,6 +12,8 @@ export function Navbar({ marca = 'FoodCampus' }) {
     navigate('/login');
   };
 
+  const iniciales = usuario?.nombre ? usuario.nombre.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase() : 'U';
+
   return (
     <nav className="navbar navbar-expand-md navbar-custom sticky-top">
       <div className="container">
@@ -65,16 +67,22 @@ export function Navbar({ marca = 'FoodCampus' }) {
             </button>
 
             {estaAutenticado ? (
-              <>
-                <span className="small d-none d-lg-inline text-body-secondary">
-                  Hola, <strong>{usuario.nombre}</strong>
-                </span>
+              <div className="d-flex align-items-center gap-2">
+                <div className="d-none d-lg-flex align-items-center gap-2 px-2 py-1 rounded-pill bg-body-tertiary border">
+                  <span
+                    className="badge rounded-circle text-white d-flex align-items-center justify-content-center"
+                    style={{ width: '22px', height: '22px', fontSize: '0.7rem', background: 'var(--fc-primary)' }}
+                  >
+                    {iniciales}
+                  </span>
+                  <span className="small fw-semibold pe-1">{usuario.nombre}</span>
+                </div>
                 <button type="button" className="btn btn-sm btn-outline-danger rounded-pill px-3" onClick={manejarSalida}>
                   Salir
                 </button>
-              </>
+              </div>
             ) : (
-              <Link className="btn btn-sm btn-primary rounded-pill px-3" to="/login">
+              <Link className="btn btn-sm btn-primary rounded-pill px-3 fw-semibold" to="/login">
                 Iniciar sesión
               </Link>
             )}
