@@ -9,19 +9,16 @@ export function NuevoPedidoPage({ pedidos, onAgregar }) {
   const { usuario } = useAuth();
   const [searchParams] = useSearchParams();
   const platoInicialId = searchParams.get('platoId') ?? '';
-
   const misPedidos = pedidos.filter((p) => Number(p.usuarioId) === Number(usuario.id));
 
   return (
-    <div>
-      <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div className="py-3">
+      <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h2 className="m-0">Registrar Nuevo Pedido</h2>
-          <p className="text-body-secondary mb-0">
-            Solicita tu plato indicando fecha y hora de recojo en cafetería.
-          </p>
+          <h1 className="h3 fw-bold mb-1">Nuevo pedido</h1>
+          <p className="text-body-secondary small mb-0">Elige cuánto quieres y cuándo lo recoges.</p>
         </div>
-        <Link className="btn btn-outline-secondary" to="/mis-pedidos">
+        <Link className="btn btn-sm btn-outline-secondary rounded-pill px-3" to="/mis-pedidos">
           Ver mis pedidos
         </Link>
       </div>

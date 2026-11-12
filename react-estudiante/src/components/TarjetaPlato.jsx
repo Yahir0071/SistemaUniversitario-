@@ -9,54 +9,37 @@ export function TarjetaPlato({ plato, puedePedir = false }) {
 
   return (
     <div className={`card h-100 card-plato ${!modelo.estaDisponible ? 'opacity-75' : ''}`}>
-      <div className="plato-img-container">
-        <img
-          src={imagenUrl}
-          alt={modelo.nombre}
-          className="plato-img"
-          loading="lazy"
-        />
-        <div className="badge-overlay">
-          <BadgeEstado estado={modelo.estado} />
+      <Link to={`/catalogo/${modelo.id}`} className="text-decoration-none text-reset">
+        <div className="plato-img-container" style={{ height: '170px' }}>
+          <img src={imagenUrl} alt={modelo.nombre} className="plato-img" loading="lazy" />
+          <div className="badge-overlay">
+            <BadgeEstado estado={modelo.estado} />
+          </div>
         </div>
-      </div>
+      </Link>
 
-      <div className="card-body d-flex flex-column p-3">
-        <div className="mb-1">
-          <span
-            className="text-uppercase small fw-bold text-body-secondary"
-            style={{ fontSize: '0.72rem', letterSpacing: '0.05em' }}
-          >
+      <div className="card-body p-3 d-flex flex-column justify-content-between">
+        <div>
+          <span className="text-uppercase small fw-bold text-secondary" style={{ fontSize: '0.68rem', letterSpacing: '0.06em' }}>
             {modelo.categoria}
           </span>
+          <div className="d-flex justify-content-between align-items-baseline gap-2 mt-1">
+            <h5 className="card-title fw-bold fs-6 mb-0 text-truncate" title={modelo.nombre}>
+              {modelo.nombre}
+            </h5>
+            <span className="fw-bold fs-6 flex-shrink-0">S/ {modelo.precio.toFixed(2)}</span>
+          </div>
         </div>
 
-        <h5 className="card-title fw-semibold mb-1 fs-6 text-truncate" title={modelo.nombre}>
-          {modelo.nombre}
-        </h5>
-
-        <p className="card-text text-body-secondary small flex-grow-1 mb-2" style={{ minHeight: '2.4rem' }}>
-          {modelo.ingredientes.join(' · ')}
-        </p>
-
-        <div className="d-flex align-items-center justify-content-between pt-2 border-top mt-auto">
-          <div>
-            <span className="small text-body-secondary d-block" style={{ fontSize: '0.7rem' }}>
-              Precio
-            </span>
-            <span className="fs-5 fw-bold text-success">S/ {modelo.precio.toFixed(2)}</span>
-          </div>
-
-          <div className="d-flex gap-1">
-            <Link className="btn btn-sm btn-outline-secondary rounded-pill px-3" to={`/catalogo/${modelo.id}`}>
-              Detalle
+        <div className="d-flex gap-2 mt-3 pt-2 border-top">
+          <Link className="btn btn-sm btn-outline-secondary rounded-pill w-100" to={`/catalogo/${modelo.id}`}>
+            Ver plato
+          </Link>
+          {puedePedir && modelo.estaDisponible && (
+            <Link className="btn btn-sm btn-primary rounded-pill w-100" to={`/nuevo-pedido?platoId=${modelo.id}`}>
+              Pedir
             </Link>
-            {puedePedir && modelo.estaDisponible && (
-              <Link className="btn btn-sm btn-primary rounded-pill px-3" to={`/nuevo-pedido?platoId=${modelo.id}`}>
-                Pedir
-              </Link>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>
