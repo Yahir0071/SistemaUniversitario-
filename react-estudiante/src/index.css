@@ -1,0 +1,170 @@
+:root {
+  --fc-primary: #ff6b35;
+  --fc-primary-hover: #eb5922;
+  --fc-primary-soft: rgba(255, 107, 53, 0.15);
+  --fc-primary-glow: rgba(255, 107, 53, 0.3);
+}
+
+[data-bs-theme="light"] {
+  --fc-bg: #f8f6f0;
+  --fc-header-bg: #ffffff;
+  --fc-header-border: #e8e3d9;
+  --fc-card-bg: #ffffff;
+  --fc-card-border: #e8e3d9;
+  --fc-hero-bg: linear-gradient(135deg, #ffffff 0%, #f4eee3 100%);
+  --fc-chip-bg: #ede9df;
+  --fc-chip-text: #57534e;
+  --fc-chip-active-bg: var(--fc-primary);
+  --fc-chip-active-text: #ffffff;
+  --fc-thumb-border: #e8e3d9;
+}
+
+[data-bs-theme="dark"] {
+  --fc-bg: #141210;
+  --fc-header-bg: #1c1917;
+  --fc-header-border: rgba(255, 255, 255, 0.08);
+  --fc-card-bg: #1f1c19;
+  --fc-card-border: rgba(255, 255, 255, 0.08);
+  --fc-hero-bg: linear-gradient(135deg, #24201c 0%, #1a1714 100%);
+  --fc-chip-bg: #2b2723;
+  --fc-chip-text: #d6d3d1;
+  --fc-chip-active-bg: var(--fc-primary);
+  --fc-chip-active-text: #ffffff;
+  --fc-thumb-border: rgba(255, 255, 255, 0.1);
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--fc-bg) !important;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Encabezado suave y diferenciado */
+.navbar-custom {
+  background-color: var(--fc-header-bg) !important;
+  border-bottom: 1px solid var(--fc-header-border);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff8c42, #ff6b35);
+  box-shadow: 0 4px 10px var(--fc-primary-glow);
+  font-size: 1.25rem;
+}
+
+/* Tarjetas y componentes */
+.card-plato {
+  background-color: var(--fc-card-bg) !important;
+  border: 1px solid var(--fc-card-border) !important;
+  border-radius: 1.25rem !important;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.card-plato:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+.plato-img-container {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+  background-color: #2b2723;
+}
+
+.plato-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.card-plato:hover .plato-img {
+  transform: scale(1.05);
+}
+
+.badge-overlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Botones con estilo Figma */
+.btn-primary {
+  background-color: var(--fc-primary) !important;
+  border-color: var(--fc-primary) !important;
+  color: #ffffff !important;
+  font-weight: 500;
+  box-shadow: 0 4px 12px var(--fc-primary-glow);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--fc-primary-hover) !important;
+  border-color: var(--fc-primary-hover) !important;
+  box-shadow: 0 6px 16px var(--fc-primary-glow);
+}
+
+.btn-outline-primary {
+  color: var(--fc-primary) !important;
+  border-color: var(--fc-primary) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--fc-primary) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px var(--fc-primary-glow);
+}
+
+/* Chips de categoría interactivos */
+.category-chip {
+  background-color: var(--fc-chip-bg);
+  color: var(--fc-chip-text);
+  border: 1px solid var(--fc-card-border);
+  padding: 0.45rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.category-chip:hover {
+  border-color: var(--fc-primary);
+  color: var(--fc-primary);
+}
+
+.category-chip.active {
+  background-color: var(--fc-chip-active-bg);
+  color: var(--fc-chip-active-text);
+  border-color: var(--fc-primary);
+  box-shadow: 0 4px 12px var(--fc-primary-glow);
+}
+
+/* Miniaturas en tabla de pedidos */
+.order-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid var(--fc-thumb-border);
+}
+
+.hero-box {
+  background: var(--fc-hero-bg) !important;
+  border: 1px solid var(--fc-card-border) !important;
+  border-radius: 1.5rem !important;
+}

@@ -1,0 +1,396 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Ana Torres",
+      "correo": "admin1@utp.edu.pe",
+      "codigo": "A00000001",
+      "rol": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": 2,
+      "nombre": "Carlos Ramos",
+      "correo": "admin2@utp.edu.pe",
+      "codigo": "A00000002",
+      "rol": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": 3,
+      "nombre": "Luis Quispe",
+      "correo": "u20231234@utp.edu.pe",
+      "codigo": "U20231234",
+      "rol": "estudiante",
+      "password": "est123"
+    },
+    {
+      "id": 4,
+      "nombre": "María Gómez",
+      "correo": "u20235678@utp.edu.pe",
+      "codigo": "U20235678",
+      "rol": "estudiante",
+      "password": "est123"
+    },
+    {
+      "id": 5,
+      "nombre": "Diego Morales",
+      "correo": "u20241111@utp.edu.pe",
+      "codigo": "U20241111",
+      "rol": "estudiante",
+      "password": "est123"
+    },
+    {
+      "id": 6,
+      "nombre": "Sofía Castro",
+      "correo": "u20242222@utp.edu.pe",
+      "codigo": "U20242222",
+      "rol": "estudiante",
+      "password": "est123"
+    },
+    {
+      "id": 7,
+      "nombre": "Jorge Benítez",
+      "correo": "u20243333@utp.edu.pe",
+      "codigo": "U20243333",
+      "rol": "estudiante",
+      "password": "est123"
+    },
+    {
+      "id": 8,
+      "nombre": "Valeria Ríos",
+      "correo": "u20244444@utp.edu.pe",
+      "codigo": "U20244444",
+      "rol": "estudiante",
+      "password": "est123"
+    }
+  ],
+  "platos": [
+    {
+      "id": 1,
+      "nombre": "Lomo Saltado Criollo",
+      "categoria": "Almuerzos",
+      "precio": 15.5,
+      "ingredientes": ["Lomo de res", "Papas fritas", "Cebolla", "Tomate", "Arroz blanco"],
+      "estado": "disponible"
+    },
+    {
+      "id": 2,
+      "nombre": "Ají de Gallina Clásico",
+      "categoria": "Almuerzos",
+      "precio": 13,
+      "ingredientes": ["Pechuga de pollo", "Crema de ají amarillo", "Papa amarilla", "Arroz blanco", "Huevo"],
+      "estado": "disponible"
+    },
+    {
+      "id": 3,
+      "nombre": "Arroz Chaufa de Pollo",
+      "categoria": "Almuerzos",
+      "precio": 12,
+      "ingredientes": ["Arroz salteado", "Pollo en trozos", "Cebolla china", "Huevo revuelto", "Sillao"],
+      "estado": "disponible"
+    },
+    {
+      "id": 4,
+      "nombre": "Sándwich Mixto Caliente",
+      "categoria": "Desayunos",
+      "precio": 6.5,
+      "ingredientes": ["Pan campesino", "Jamón inglés", "Queso edam derretido", "Mantequilla"],
+      "estado": "disponible"
+    },
+    {
+      "id": 5,
+      "nombre": "Hamburguesa Artesanal Clásica",
+      "categoria": "Snacks",
+      "precio": 9.5,
+      "ingredientes": ["Carne de res 150g", "Queso cheddar", "Lechuga", "Tomate", "Papas al hilo"],
+      "estado": "agotado"
+    },
+    {
+      "id": 6,
+      "nombre": "Ensalada César con Pollo",
+      "categoria": "Saludable",
+      "precio": 11,
+      "ingredientes": ["Lechuga romana", "Pechuga a la plancha", "Croutons", "Queso parmesano", "Salsa césar"],
+      "estado": "disponible"
+    },
+    {
+      "id": 7,
+      "nombre": "Jugo Especial de Fresa",
+      "categoria": "Bebidas",
+      "precio": 5.5,
+      "ingredientes": ["Fresa fresca", "Plátano de seda", "Leche", "Algarrobina"],
+      "estado": "disponible"
+    },
+    {
+      "id": 8,
+      "nombre": "Pie de Manzana Casero",
+      "categoria": "Postres",
+      "precio": 4.5,
+      "ingredientes": ["Masa quebrada", "Manzanas acarameladas", "Canela"],
+      "estado": "agotado"
+    }
+  ],
+  "pedidos": [
+    {
+      "id": 1,
+      "codigo": "PED-0001",
+      "platoId": 1,
+      "usuarioId": 3,
+      "fecha": "2026-11-20",
+      "cantidad": 2,
+      "precioUnitario": 15.5,
+      "precioTotal": 31,
+      "notas": "Bien cocido",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-15T12:00:00Z"
+    },
+    {
+      "id": 2,
+      "codigo": "PED-0002",
+      "platoId": 2,
+      "usuarioId": 4,
+      "fecha": "2026-11-20",
+      "cantidad": 1,
+      "precioUnitario": 13,
+      "precioTotal": 13,
+      "notas": "Sin huevo",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-15T12:05:00Z"
+    },
+    {
+      "id": 3,
+      "codigo": "PED-0003",
+      "platoId": 4,
+      "usuarioId": 5,
+      "fecha": "2026-11-20",
+      "cantidad": 1,
+      "precioUnitario": 6.5,
+      "precioTotal": 6.5,
+      "notas": "Para llevar",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-15T12:10:00Z"
+    },
+    {
+      "id": 4,
+      "codigo": "PED-0004",
+      "platoId": 3,
+      "usuarioId": 6,
+      "fecha": "2026-11-20",
+      "cantidad": 2,
+      "precioUnitario": 12,
+      "precioTotal": 24,
+      "notas": "Con tártara",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-15T12:15:00Z"
+    },
+    {
+      "id": 5,
+      "codigo": "PED-0005",
+      "platoId": 7,
+      "usuarioId": 7,
+      "fecha": "2026-11-20",
+      "cantidad": 1,
+      "precioUnitario": 5.5,
+      "precioTotal": 5.5,
+      "notas": "Sin azúcar añadida",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-15T12:20:00Z"
+    },
+    {
+      "id": 6,
+      "codigo": "PED-0006",
+      "platoId": 6,
+      "usuarioId": 8,
+      "fecha": "2026-11-20",
+      "cantidad": 1,
+      "precioUnitario": 11,
+      "precioTotal": 11,
+      "notas": "Dressing aparte",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-15T12:25:00Z"
+    },
+    {
+      "id": 7,
+      "codigo": "PED-0007",
+      "platoId": 5,
+      "usuarioId": 3,
+      "fecha": "2026-11-20",
+      "cantidad": 2,
+      "precioUnitario": 9.5,
+      "precioTotal": 19,
+      "notas": "Con ají",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-15T12:30:00Z"
+    },
+    {
+      "id": 8,
+      "codigo": "PED-0008",
+      "platoId": 8,
+      "usuarioId": 4,
+      "fecha": "2026-11-20",
+      "cantidad": 1,
+      "precioUnitario": 4.5,
+      "precioTotal": 4.5,
+      "notas": "Calentado",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-15T12:35:00Z"
+    },
+    {
+      "id": 9,
+      "codigo": "PED-0009",
+      "platoId": 1,
+      "usuarioId": 5,
+      "fecha": "2026-11-21",
+      "cantidad": 1,
+      "precioUnitario": 15.5,
+      "precioTotal": 15.5,
+      "notas": "Porción extra de arroz",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-16T12:00:00Z"
+    },
+    {
+      "id": 10,
+      "codigo": "PED-0010",
+      "platoId": 2,
+      "usuarioId": 6,
+      "fecha": "2026-11-21",
+      "cantidad": 1,
+      "precioUnitario": 13,
+      "precioTotal": 13,
+      "notas": "",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-16T12:05:00Z"
+    },
+    {
+      "id": 11,
+      "codigo": "PED-0011",
+      "platoId": 3,
+      "usuarioId": 7,
+      "fecha": "2026-11-21",
+      "cantidad": 1,
+      "precioUnitario": 12,
+      "precioTotal": 12,
+      "notas": "",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-16T12:10:00Z"
+    },
+    {
+      "id": 12,
+      "codigo": "PED-0012",
+      "platoId": 7,
+      "usuarioId": 8,
+      "fecha": "2026-11-21",
+      "cantidad": 2,
+      "precioUnitario": 5.5,
+      "precioTotal": 11,
+      "notas": "Con hielo",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-16T12:15:00Z"
+    },
+    {
+      "id": 13,
+      "codigo": "PED-0013",
+      "platoId": 4,
+      "usuarioId": 3,
+      "fecha": "2026-11-21",
+      "cantidad": 1,
+      "precioUnitario": 6.5,
+      "precioTotal": 6.5,
+      "notas": "",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-16T12:20:00Z"
+    },
+    {
+      "id": 14,
+      "codigo": "PED-0014",
+      "platoId": 6,
+      "usuarioId": 4,
+      "fecha": "2026-11-21",
+      "cantidad": 1,
+      "precioUnitario": 11,
+      "precioTotal": 11,
+      "notas": "Sin queso",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-16T12:25:00Z"
+    },
+    {
+      "id": 15,
+      "codigo": "PED-0015",
+      "platoId": 1,
+      "usuarioId": 5,
+      "fecha": "2026-11-22",
+      "cantidad": 2,
+      "precioUnitario": 15.5,
+      "precioTotal": 31,
+      "notas": "Para comer en mesa",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-17T12:00:00Z"
+    },
+    {
+      "id": 16,
+      "codigo": "PED-0016",
+      "platoId": 5,
+      "usuarioId": 6,
+      "fecha": "2026-11-22",
+      "cantidad": 1,
+      "precioUnitario": 9.5,
+      "precioTotal": 9.5,
+      "notas": "Plato agotado",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-17T12:05:00Z"
+    },
+    {
+      "id": 17,
+      "codigo": "PED-0017",
+      "platoId": 8,
+      "usuarioId": 7,
+      "fecha": "2026-11-22",
+      "cantidad": 2,
+      "precioUnitario": 4.5,
+      "precioTotal": 9,
+      "notas": "Postre no disponible",
+      "estado": "rechazada",
+      "creadoEn": "2026-11-17T12:10:00Z"
+    },
+    {
+      "id": 18,
+      "codigo": "PED-0018",
+      "platoId": 2,
+      "usuarioId": 8,
+      "fecha": "2026-11-22",
+      "cantidad": 1,
+      "precioUnitario": 13,
+      "precioTotal": 13,
+      "notas": "Poco arroz",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-17T12:15:00Z"
+    },
+    {
+      "id": 19,
+      "codigo": "PED-0019",
+      "platoId": 3,
+      "usuarioId": 3,
+      "fecha": "2026-11-22",
+      "cantidad": 1,
+      "precioUnitario": 12,
+      "precioTotal": 12,
+      "notas": "Para llevar",
+      "estado": "aprobada",
+      "creadoEn": "2026-11-17T12:20:00Z"
+    },
+    {
+      "id": 20,
+      "codigo": "PED-0020",
+      "platoId": 7,
+      "usuarioId": 4,
+      "fecha": "2026-11-22",
+      "cantidad": 1,
+      "precioUnitario": 5.5,
+      "precioTotal": 5.5,
+      "notas": "",
+      "estado": "pendiente",
+      "creadoEn": "2026-11-17T12:25:00Z"
+    }
+  ]
+}

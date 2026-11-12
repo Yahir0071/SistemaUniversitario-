@@ -4,19 +4,17 @@
 **Dominio:** FoodCampus (Gestión de Menú, Platos y Pedidos de Cafetería Universitaria)  
 
 ## Integrantes del Grupo
-| N° | Nombre Completo | Código UTP | Rol / Responsabilidad en Avance 1 |
-|:--:|:----------------|:----------:|:----------------------------------|
-| 1  | Yahir Anthony Huaira Yauri | U24253852 | `core-js` (Validadores, Modelos, Estadísticas) y Catálogo de Platos Angular |
+| N° | Nombre Completo | Código UTP | Rol / Responsabilidad en Avance 1 y 2 |
+|:--:|:----------------|:----------:|:--------------------------------------|
+| 1  | Yahir Anthony Huaira Yauri | U24253852 | `core-js` (Validadores, Modelos, Estadísticas), Catálogo de Platos Angular y Portal React |
 | 2  | Angello Gabriel Enciso Abril | U24257462 | `api-mock` (db.json, endpoints json-server) y Colección Postman |
 | 3  | Mathias Sebastián Loreto Peñaranda | U24223538 | `angular-admin` (Routing, Servicios Plato/Pedido, Interfaces) |
 | 4  | Esaul Ronaldo Chancan Moreno | U24233179 | `angular-admin` (Gestión de Pedidos, Pipes, Directivas y UI Bootstrap) |
-| 5  | Jeferson Alonso Almerco Ramirez | U23249977 | Documentación y Pruebas Generales (QA) |
+| 5  | Jeferson Alonso Almerco Ramirez | U23249977 | `readme.md` Documentación y Pruebas Generales (QA) |
 
 ---
 
-## Avance 1 – Guía de Ejecución
-
-> **Importante:** Para que el frontend Angular funcione correctamente, deben mantenerse abiertas **dos terminales**: una para la API REST simulada y otra para la aplicación Angular.
+## Guía de Ejecución de Servidores
 
 ### 1. Núcleo JS (Pruebas unitarias con Node.js)
 ```bash
@@ -33,14 +31,67 @@ npm run api
 ```
 *Levanta `json-server` en `http://localhost:3000` con persistencia en `db.json` con entidades `usuarios`, `platos` y `pedidos`.*
 
-### 3. Panel Administrativo Angular (Puerto 4200)
+### 3. Panel Administrativo Angular (Puerto 4200) – Avance 1
 ```bash
 cd angular-admin
 npm install # o npm ci
 npm run sync-core
 npm start
 ```
-*Abre la aplicación en `http://localhost:4200` conectada al API de `http://localhost:3000`.*
+*Abre el panel administrativo en `http://localhost:4200` conectado a la API de `http://localhost:3000`.*
+*Para ejecutar las pruebas unitarias de Angular con Vitest:* `npm test`.
+
+### 4. Portal del Estudiante React + Vite (Puerto 5173) – Avance 2
+> **Nota de Avance 2:** En esta fase los datos son locales (copia importada de `db.json`); no requiere conexión externa obligatoria para navegar el catálogo y simular pedidos.
+
+```bash
+cd react-estudiante
+npm install # o npm ci
+npm run sync-core # sincroniza lógica y validadores de core-js
+npm run sync-data # sincroniza datos iniciales de db.json
+npm run dev
+```
+*Abre la aplicación del estudiante en `http://localhost:5173`.*
+
+* **Credenciales Demo para inicio de sesión de estudiante:**
+  * **Correo:** `u20231234@utp.edu.pe`
+  * **Contraseña:** `est123`
+  * *(También disponible el botón directo "Autocompletar cuenta demo (Luis Quispe)" en `/login`)*
+* **Comandos adicionales de React:**
+  * `npm run build`: Compilación optimizada para producción en `dist/`.
+  * `npm run lint`: Análisis estático de código con Oxlint.
+
+---
+
+## Avance 2 – Portal React del Estudiante (Semana 14)
+El portal permite a los estudiantes navegar el catálogo de platos, filtrar por categoría y búsqueda de texto, iniciar sesión simulada y registrar sus pedidos con validaciones de negocio en tiempo real.
+
+### Requisitos Implementados:
+1. **Proyecto Vite (JSX) con Bootstrap 5:** Estructurado en módulos limpios y responsivos.
+2. **Componentes con props (< 120 líneas):**
+   * `Navbar`: Barra superior responsiva con navegación condicional y selector de tema.
+   * `TarjetaPlato`: Presentación individual de cada plato con precios, categorías y acciones.
+   * `ListaPlatos`: Renderizado en grilla responsiva con manejo de estado vacío y `key` única.
+   * `FormularioPedido` (apoyado en `CampoForm`): Formulario controlado con mensajes de error por campo.
+   * `BadgeEstado`: Etiqueta visual para estados de platos y pedidos.
+   * `ContadorProximoPedido`: Alerta informativa con cuenta regresiva.
+   * `RutaProtegida`: Wrapper de seguridad para restringir vistas sin autenticación.
+3. **Navegación con `react-router-dom` (7 rutas):**
+   * `/`: Página de inicio (`HomePage`) con resumen y métricas.
+   * `/catalogo`: Catálogo completo de platos (`CatalogoPage`).
+   * `/catalogo/:id`: Detalle extendido del plato (`DetallePlatoPage`) leyendo parámetro vía `useParams`.
+   * `/login`: Inicio de sesión del estudiante (`LoginPage`).
+   * `/mis-pedidos`: Lista de pedidos del estudiante (`MisPedidosPage`) — **Ruta protegida**.
+   * `/nuevo-pedido`: Registro de nuevo pedido (`NuevoPedidoPage`) — **Ruta protegida**.
+   * `*`: Página 404 para rutas inexistentes (`NotFoundPage`).
+4. **Hooks con casos de uso reales:**
+   * `useState`: Filtros reactivos por categoría y texto en catálogo, y lista dinámica de pedidos.
+   * `useEffect`: Actualización del título de la pestaña del navegador según la página (`useTituloPagina`) y temporizador de cuenta regresiva en vivo con limpieza `clearInterval` al desmontar.
+   * `useContext`: `AuthContext` (usuario en sesión y login/logout) y `ThemeContext` (alternancia modo claro/oscuro con `data-bs-theme`).
+   * `useRef`: Autoenfoque automático en el primer campo del formulario (`select` de plato) y reinicio de foco tras guardar.
+5. **Formulario y Reutilización de `core-js`:**
+   * Formulario controlado que reutiliza `esFecha`, `esHora`, `validarPedido` y los modelos `Plato` y `Pedido` de `core-js`.
+   * **Bloqueo de cruce de horarios:** Impide que un mismo estudiante registre dos pedidos activos en la misma fecha y hora.
 
 ---
 
@@ -66,6 +117,7 @@ Incluye pruebas para los métodos HTTP sobre el dominio FoodCampus:
 2. **Códigos de Pedido:** Formato estandarizado `PED-XXXX` generado dinámicamente mediante closures.
 3. **Cálculo de Precios:** Regla de consistencia financiera obligatoria: `precioTotal = cantidad * precioUnitario`.
 4. **Agrupación y Estadísticas:** Conteo de pedidos por estado mediante `reduce`, resumen de ventas por plato mediante `Map`, extracción de categorías únicas con `Set`, y ranking de platos más pedidos con spread operator y ordenamiento inmutable.
+5. **Consistencia de Horarios en Pedidos (Avance 2):** Un estudiante no puede tener dos pedidos activos programados para la misma fecha y hora de recojo.
 
 ---
 
