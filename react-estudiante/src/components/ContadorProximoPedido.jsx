@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Pedido } from '../core/modelos.js';
 import { obtenerHoraPedido } from '../utils/pedidoValidation.js';
+import { obtenerImagenPlato } from '../data/platosImagenes.js';
 
 function formatearRestante(ms) {
   if (ms <= 0) return '¡Tu pedido ya está por entregarse!';
@@ -31,24 +32,31 @@ export function ContadorProximoPedido({ pedidos, platos = [] }) {
 
   if (!proximo) {
     return (
-      <div className="alert alert-secondary mb-3">
-        No tienes próximos pedidos programados por recoger.
+      <div className="card card-plato p-3 mb-3 text-body-secondary small">
+        ℹ️ No tienes próximos pedidos pendientes de recojo.
       </div>
     );
   }
 
   const plato = platos.find((pl) => Number(pl.id) === Number(proximo.platoId));
+  const imagenUrl = obtenerImagenPlato(proximo.platoId);
 
   return (
-    <div className="alert alert-primary d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-      <div>
-        <strong>Próximo pedido ({proximo.codigo}):</strong>{' '}
-        {plato ? plato.nombre : `Plato #${proximo.platoId}`} — {proximo.fecha} a las{' '}
-        {obtenerHoraPedido(proximo)}
+    <div className="card card-plato p-3 mb-4 d-flex flex-row flex-wrap justify-content-between align-items-center gap-3">
+      <div className="d-flex align-items-center gap-3">
+        <img src={imagenUrl} alt="" className="order-thumb" style={{ width: '48px', height: '48px' }} />
+        <div>
+          <span className="badge rounded-pill bg-warning text-dark px-2 py-1 mb-1 small">
+            Próxima entrega: {proximo.codigo}
+          </span>
+          <div className="fw-semibold">
+            {plato ? plato.nombre : `Plato #${proximo.platoId}`} — {proximo.fecha} ({obtenerHoraPedido(proximo)})
+          </div>
+        </div>
       </div>
-      <span className="badge text-bg-dark fs-6 font-monospace">
+      <div className="badge rounded-pill px-3 py-2 fs-6 font-monospace" style={{ backgroundColor: 'var(--fc-primary)', color: '#fff' }}>
         ⏱ {formatearRestante(proximo.timestamp - ahora)}
-      </span>
+      </div>
     </div>
   );
 }

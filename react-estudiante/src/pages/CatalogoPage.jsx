@@ -25,48 +25,57 @@ export function CatalogoPage() {
 
   return (
     <div>
-      <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-        <h2 className="m-0">Catálogo de Platos</h2>
-        <span className="text-body-secondary small">{platosFiltrados.length} resultados</span>
+      <div className="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
+        <div>
+          <h2 className="fw-bold mb-1">Catálogo de Platos</h2>
+          <p className="text-body-secondary small mb-0">
+            Descubre las opciones gastronómicas disponibles en el campus.
+          </p>
+        </div>
+        <span className="badge rounded-pill bg-body-tertiary border text-body px-3 py-2">
+          {platosFiltrados.length} opciones encontradas
+        </span>
       </div>
 
-      <div className="row g-2 mb-4">
-        <div className="col-md-5">
-          <input
-            type="search"
-            className="form-control"
-            placeholder="Buscar por nombre o ingrediente..."
-            value={texto}
-            onChange={(e) => setTexto(e.target.value)}
-          />
-        </div>
-        <div className="col-md-4">
-          <select
-            className="form-select"
-            value={categoria}
-            onChange={(e) => setCategoria(e.target.value)}
-          >
-            <option value="">Todas las categorías</option>
-            {categorias.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-        {(texto || categoria) && (
-          <div className="col-md-3">
+      <div className="mb-3">
+        <input
+          type="search"
+          className="form-control rounded-pill px-4 py-2"
+          placeholder="🔍 Buscar plato por nombre o ingrediente..."
+          value={texto}
+          onChange={(e) => setTexto(e.target.value)}
+        />
+      </div>
+
+      <div className="d-flex flex-wrap gap-2 mb-4 align-items-center">
+        <button
+          type="button"
+          className={`category-chip ${!categoria ? 'active' : ''}`}
+          onClick={() => setCategoria('')}
+        >
+          Todos ({db.platos.length})
+        </button>
+        {categorias.map((cat) => {
+          const cantidad = db.platos.filter((p) => p.categoria === cat).length;
+          return (
             <button
+              key={cat}
               type="button"
-              className="btn btn-outline-secondary w-100"
-              onClick={() => {
-                setTexto('');
-                setCategoria('');
-              }}
+              className={`category-chip ${categoria === cat ? 'active' : ''}`}
+              onClick={() => setCategoria(cat === categoria ? '' : cat)}
             >
-              Limpiar filtros
+              {cat} ({cantidad})
             </button>
-          </div>
+          );
+        })}
+        {(texto || categoria) && (
+          <button
+            type="button"
+            className="btn btn-sm btn-link text-body-secondary ms-auto text-decoration-none"
+            onClick={() => { setTexto(''); setCategoria(''); }}
+          >
+            Limpiar filtros ✕
+          </button>
         )}
       </div>
 

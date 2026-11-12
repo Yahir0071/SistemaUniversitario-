@@ -37,13 +37,16 @@ export function LoginPage() {
   };
 
   return (
-    <div className="row justify-content-center">
+    <div className="row justify-content-center py-4">
       <div className="col-md-6 col-lg-5">
-        <div className="card shadow-sm">
+        <div className="card card-plato shadow-sm">
           <div className="card-body p-4">
-            <h2 className="card-title mb-3">Iniciar Sesión (Estudiante)</h2>
-            <p className="text-body-secondary small">
-              Usa tu correo institucional <code>@utp.edu.pe</code> de <code>db.json</code>.
+            <div className="d-flex align-items-center gap-2 mb-3">
+              <span className="brand-icon">🍴</span>
+              <h3 className="card-title fw-bold m-0">Iniciar Sesión</h3>
+            </div>
+            <p className="text-body-secondary small mb-4">
+              Accede con tu cuenta institucional <code>@utp.edu.pe</code> para registrar pedidos.
             </p>
 
             {error && <div className="alert alert-danger">{error}</div>}
@@ -55,19 +58,19 @@ export function LoginPage() {
                   id="correo"
                   ref={correoRef}
                   type="email"
-                  className="form-control"
+                  className="form-control rounded-pill px-3"
                   placeholder="u20231234@utp.edu.pe"
                   value={correo}
                   onChange={(e) => { setCorreo(e.target.value); setError(''); }}
                 />
               </div>
 
-              <div className="mb-3">
+              <div className="mb-4">
                 <label className="form-label" htmlFor="password">Contraseña</label>
                 <input
                   id="password"
                   type="password"
-                  className="form-control"
+                  className="form-control rounded-pill px-3"
                   placeholder="••••••"
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); setError(''); }}
@@ -75,8 +78,10 @@ export function LoginPage() {
               </div>
 
               <div className="d-grid gap-2">
-                <button type="submit" className="btn btn-primary">Ingresar</button>
-                <button type="button" className="btn btn-outline-secondary btn-sm" onClick={cargarDemo}>
+                <button type="submit" className="btn btn-primary rounded-pill py-2">
+                  Ingresar al portal
+                </button>
+                <button type="button" className="btn btn-outline-secondary rounded-pill btn-sm" onClick={cargarDemo}>
                   Autocompletar cuenta demo (Luis Quispe)
                 </button>
               </div>

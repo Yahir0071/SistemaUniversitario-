@@ -1,12 +1,16 @@
 const ESTILOS = {
-  disponible: { clase: 'text-bg-success', texto: 'Disponible' },
-  agotado: { clase: 'text-bg-warning', texto: 'Agotado' },
-  pendiente: { clase: 'text-bg-warning', texto: '⏳ Pendiente' },
-  aprobada: { clase: 'text-bg-success', texto: '👨‍🍳 En preparación' },
-  rechazada: { clase: 'text-bg-danger', texto: '❌ Cancelado' },
+  disponible: { clase: 'bg-success text-white', texto: 'Disponible', dot: '● ' },
+  agotado: { clase: 'bg-secondary text-white', texto: 'Agotado', dot: '○ ' },
+  pendiente: { clase: 'bg-warning text-dark', texto: '⏳ Pendiente', dot: '' },
+  aprobada: { clase: 'bg-success text-white', texto: '👨‍🍳 En preparación', dot: '' },
+  rechazada: { clase: 'bg-danger text-white', texto: '❌ Cancelado', dot: '' },
 };
 
 export function BadgeEstado({ estado }) {
-  const config = ESTILOS[estado] ?? { clase: 'text-bg-secondary', texto: estado };
-  return <span className={`badge ${config.clase}`}>{config.texto}</span>;
+  const config = ESTILOS[estado] ?? { clase: 'bg-secondary text-white', texto: estado, dot: '' };
+  return (
+    <span className={`badge rounded-pill px-2 py-1 fw-semibold ${config.clase}`}>
+      {config.dot}{config.texto}
+    </span>
+  );
 }

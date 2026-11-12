@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Pedido } from '../core/modelos.js';
 import { obtenerFechaHoy, validarFormularioPedido } from '../utils/pedidoValidation.js';
 import { CampoForm } from './CampoForm.jsx';
+import { obtenerImagenPlato } from '../data/platosImagenes.js';
 
 const estadoInicial = (platoId = '') => ({
   platoId: platoId ? String(platoId) : '',
@@ -51,23 +52,26 @@ export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInici
   };
 
   return (
-    <form onSubmit={manejarEnvio} noValidate className="col-lg-7">
+    <form onSubmit={manejarEnvio} noValidate className="card card-plato p-4 col-lg-8 shadow-sm">
       {exito && <div className="alert alert-success">{exito}</div>}
       {errores.general && <div className="alert alert-danger">{errores.general}</div>}
 
       <CampoForm id="platoId" label="Plato del menú" error={errores.platoId}>
-        <select
-          id="platoId" ref={primerCampoRef}
-          className={`form-select ${errores.platoId ? 'is-invalid' : ''}`}
-          value={form.platoId} onChange={(e) => actualizar('platoId', e.target.value)}
-        >
-          <option value="">Selecciona un plato...</option>
-          {platos.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.nombre} — S/ {p.precio.toFixed(2)} {p.estado === 'agotado' ? '(Agotado)' : ''}
-            </option>
-          ))}
-        </select>
+        <div className="d-flex gap-2 align-items-center">
+          {platoActual && <img src={obtenerImagenPlato(platoActual.id)} alt="" className="order-thumb" />}
+          <select
+            id="platoId" ref={primerCampoRef}
+            className={`form-select ${errores.platoId ? 'is-invalid' : ''}`}
+            value={form.platoId} onChange={(e) => actualizar('platoId', e.target.value)}
+          >
+            <option value="">Selecciona un plato...</option>
+            {platos.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.nombre} — S/ {p.precio.toFixed(2)} {p.estado === 'agotado' ? '(Agotado)' : ''}
+              </option>
+            ))}
+          </select>
+        </div>
       </CampoForm>
 
       <div className="row g-3 mb-3">
@@ -99,12 +103,14 @@ export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInici
         />
       </CampoForm>
 
-      <div className="d-flex justify-content-between align-items-center bg-body-tertiary p-3 rounded mb-3 border">
+      <div className="d-flex justify-content-between align-items-center bg-body-tertiary p-3 rounded-4 mb-4 border">
         <span className="fw-semibold">Total calculado:</span>
         <span className="fs-4 fw-bold text-success">S/ {totalEstimado.toFixed(2)}</span>
       </div>
 
-      <button type="submit" className="btn btn-primary">Confirmar pedido</button>
+      <button type="submit" className="btn btn-primary rounded-pill px-4 align-self-start">
+        Confirmar pedido
+      </button>
     </form>
   );
 }
