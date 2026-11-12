@@ -31,12 +31,15 @@ export function LoginPage() {
   };
 
   return (
-    <div className="row justify-content-center py-5">
-      <div className="col-md-6 col-lg-5 col-xl-4">
-        <div className="card card-plato shadow-lg border-0 p-4 p-md-5">
+    <div className="login-wrapper py-4">
+      <div className="w-100" style={{ maxWidth: '440px' }}>
+        <div className="card card-login p-4 p-md-5">
           <div className="text-center mb-4">
-            <span className="brand-icon mx-auto mb-3" style={{ width: '48px', height: '48px', fontSize: '1.5rem' }}>🍴</span>
-            <h2 className="fw-bold fs-4 mb-1">Acceso Estudiante</h2>
+            <span className="brand-icon mx-auto mb-3" style={{ width: '52px', height: '52px', fontSize: '1.6rem' }}>🍴</span>
+            <div className="d-inline-flex align-items-center gap-1 px-3 py-1 rounded-pill bg-body-tertiary border mb-2 small fw-semibold">
+              <span className="text-success">●</span> Portal Estudiantil
+            </div>
+            <h2 className="fw-bold fs-3 mb-1">Acceso FoodCampus</h2>
             <p className="text-body-secondary small mb-0">
               Ingresa con tu correo institucional UTP para gestionar tus órdenes.
             </p>
@@ -46,8 +49,9 @@ export function LoginPage() {
 
           <form onSubmit={manejarSubmit} noValidate>
             <div className="mb-3">
-              <label className="form-label small fw-semibold text-uppercase text-body-secondary" htmlFor="correo">
-                Correo Institucional
+              <label className="form-label small fw-semibold text-uppercase text-body-secondary d-flex justify-content-between" htmlFor="correo">
+                <span>Correo Institucional</span>
+                <span className="text-muted" style={{ fontSize: '0.72rem' }}>@utp.edu.pe</span>
               </label>
               <input
                 id="correo" ref={correoRef} type="email"
@@ -67,20 +71,30 @@ export function LoginPage() {
               />
             </div>
 
-            <div className="d-grid gap-2 mb-3">
-              <button type="submit" className="btn btn-primary rounded-pill py-2 fw-semibold">
-                Iniciar Sesión
-              </button>
+            <button type="submit" className="btn btn-primary rounded-pill py-2 w-100 fw-semibold mb-4">
+              Iniciar Sesión →
+            </button>
+
+            <div className="demo-account-card mb-3" onClick={cargarDemo} role="button">
+              <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-center gap-2">
+                  <span className="badge rounded-circle text-white d-flex align-items-center justify-content-center"
+                    style={{ width: '28px', height: '28px', fontSize: '0.75rem', background: 'var(--fc-primary)' }}>
+                    LQ
+                  </span>
+                  <div className="text-start">
+                    <div className="small fw-bold">Luis Quispe · Demo</div>
+                    <div className="text-muted" style={{ fontSize: '0.72rem' }}>u20231234@utp.edu.pe</div>
+                  </div>
+                </div>
+                <span className="badge rounded-pill text-white px-2 py-1" style={{ fontSize: '0.7rem', background: 'var(--fc-primary)' }}>
+                  Auto-rellenar ⚡
+                </span>
+              </div>
             </div>
 
-            <div className="pt-3 border-top text-center">
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-secondary rounded-pill px-3 w-100"
-                onClick={cargarDemo}
-              >
-                ⚡ Ingresar con cuenta demo (Luis Quispe)
-              </button>
+            <div className="text-center text-muted small" style={{ fontSize: '0.75rem' }}>
+              🔒 Acceso seguro con validación institucional FoodCampus
             </div>
           </form>
         </div>

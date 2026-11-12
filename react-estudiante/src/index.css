@@ -332,3 +332,52 @@ body {
   border-radius: 1.75rem !important;
   box-shadow: var(--fc-card-shadow);
 }
+
+/* Luxury Login & Auth Experience */
+.login-wrapper {
+  position: relative;
+  min-height: calc(85vh - 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.16) 0%, rgba(255, 107, 53, 0) 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card-login {
+  position: relative;
+  z-index: 1;
+  background: var(--fc-card-bg) !important;
+  border: 1px solid var(--fc-card-border) !important;
+  border-radius: 1.5rem !important;
+  box-shadow: var(--fc-card-shadow-hover);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.demo-account-card {
+  background: var(--fc-input-bg);
+  border: 1px dashed var(--fc-card-border);
+  border-radius: 1rem;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.demo-account-card:hover {
+  border-color: var(--fc-primary);
+  background: var(--fc-primary-soft);
+  transform: translateY(-2px);
+}
