@@ -9,52 +9,8 @@ import { EstadoPedidoPipe } from '../../pipes/estado-pedido.pipe';
 @Component({
   selector: 'app-pedido-list',
   imports: [NgClass, EstadoPedidoPipe],
-  template: `
-    <h2>Órdenes y Pedidos del Campus</h2>
-    @if (error()) { <div class="alert alert-danger">{{ error() }}</div> }
-    <table class="table table-hover align-middle">
-      <thead>
-        <tr>
-          <th>Código</th>
-          <th>Plato solicitado</th>
-          <th>Alumno</th>
-          <th>Fecha</th>
-          <th>Cantidad</th>
-          <th>Total</th>
-          <th>Notas</th>
-          <th>Estado</th>
-          <th class="text-end">Acción</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (ped of pedidos(); track ped.id) {
-          <tr>
-            <td><strong>{{ ped.codigo }}</strong></td>
-            <td>{{ nombrePlato(ped.platoId) }}</td>
-            <td>#{{ ped.usuarioId }}</td>
-            <td>{{ ped.fecha }}</td>
-            <td>{{ ped.cantidad }} unid.</td>
-            <td><strong>S/ {{ ped.precioTotal.toFixed(2) }}</strong></td>
-            <td><small class="text-muted">{{ ped.notas || 'Sin notas' }}</small></td>
-            <td>
-              <span class="badge" [ngClass]="{
-                'text-bg-success': ped.estado === 'aprobada',
-                'text-bg-warning': ped.estado === 'pendiente',
-                'text-bg-danger': ped.estado === 'rechazada'
-              }">{{ ped.estado | estadoPedido }}</span>
-            </td>
-            <td class="text-end">
-              @if (ped.estado === 'pendiente') {
-                <button class="btn btn-sm btn-outline-danger" (click)="cancelar(ped)">Cancelar</button>
-              }
-            </td>
-          </tr>
-        } @empty {
-          <tr><td colspan="9" class="text-center text-muted">No hay pedidos registrados</td></tr>
-        }
-      </tbody>
-    </table>
-  `,
+  templateUrl: './pedido-list.html',
+  styleUrl: './pedido-list.css',
 })
 export class PedidoList implements OnInit {
   private pedidoSrv = inject(PedidoService);

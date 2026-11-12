@@ -1,0 +1,4 @@
+/* Estilos específicos de la lista de platos */
+.table th {
+  white-space: nowrap;
+}
