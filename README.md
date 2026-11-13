@@ -69,12 +69,16 @@ El portal permite a los estudiantes navegar el catálogo de platos, filtrar por 
 ### Requisitos Implementados:
 1. **Proyecto Vite (JSX) con Bootstrap 5:** Estructurado en módulos limpios y responsivos.
 2. **Componentes con props (< 120 líneas):**
-   * `Navbar`: Barra superior responsiva con navegación condicional y selector de tema.
+   * `Navbar`: Barra superior responsiva con navegación condicional y selector de tema claro/oscuro en 1 clic.
    * `TarjetaPlato`: Presentación individual de cada plato con precios, categorías y acciones.
    * `ListaPlatos`: Renderizado en grilla responsiva con manejo de estado vacío y `key` única.
-   * `FormularioPedido` (apoyado en `CampoForm`): Formulario controlado con mensajes de error por campo.
+   * `FormularioPedido` (apoyado en `CampoForm`): Formulario controlado en tarjetas apiladas con mensajes de error por campo y autoenfoque con `useRef`.
+   * `SelectorFranjas`: Selector dinámico de 7 días (domingos cerrados) y horarios cada 30 min por franja (mañana, mediodía, tarde) con bloqueo de horas pasadas.
+   * `ResumenPedidoCard`: Panel sticky lateral con vista previa del plato, desglose de precio y total estimado.
+   * `TicketConfirmado`: Comprobante visual de confirmación con código de pedido `PED-XXXX`.
    * `BadgeEstado`: Etiqueta visual para estados de platos y pedidos.
-   * `ContadorProximoPedido`: Alerta informativa con cuenta regresiva.
+   * `ContadorProximoPedido`: Alerta informativa con cuenta regresiva en vivo.
+   * `ModalCancelarPedido`: Modal accesible con backdrop blur para confirmación de cancelación de pedidos.
    * `RutaProtegida`: Wrapper de seguridad para restringir vistas sin autenticación.
 3. **Navegación con `react-router-dom` (7 rutas):**
    * `/`: Página de inicio (`HomePage`) con resumen y métricas.

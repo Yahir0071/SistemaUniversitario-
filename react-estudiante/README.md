@@ -44,12 +44,16 @@ Para probar los flujos protegidos de la aplicación:
 
 ### 1. Componentes con Props (< 120 líneas)
 Todos los componentes respetan el límite de tamaño, utilizan props y aplican renderizado condicional y listas con `key`:
-* `Navbar`: Barra de navegación con control de sesión y botón de cambio de tema.
+* `Navbar`: Barra de navegación con control de sesión y botón de cambio de tema en 1 solo clic.
 * `TarjetaPlato`: Tarjeta individual de catálogo con badge de estado, ingredientes y acciones.
 * `ListaPlatos`: Cuadrícula responsiva de platos con mensaje de estado vacío.
-* `FormularioPedido` & `CampoForm`: Formulario controlado con validación reactiva campo por campo.
+* `FormularioPedido` & `CampoForm`: Formulario controlado con validación reactiva campo por campo, autoenfoque con `useRef` y selector de platos interactivo.
+* `SelectorFranjas`: Selector dinámico de 7 días (domingos cerrados) y franjas horarias de 30 min (con deshabilitación inteligente de horas pasadas).
+* `ResumenPedidoCard`: Panel sticky lateral con vista previa del plato, desglose de precio y total reactivo.
+* `TicketConfirmado`: Tarjeta de confirmación con código de pedido `PED-XXXX` y acciones directas.
 * `BadgeEstado`: Etiqueta para estados de platos y pedidos.
-* `ContadorProximoPedido`: Barra informativa con temporizador regresivo.
+* `ContadorProximoPedido`: Barra informativa con temporizador regresivo en vivo.
+* `ModalCancelarPedido`: Ventana modal para confirmación de cancelación de pedidos pendientes.
 * `RutaProtegida`: Componente de enrutamiento que redirige al `/login` si no hay sesión activa.
 
 ### 2. Navegación con `react-router-dom` (7 Rutas)
