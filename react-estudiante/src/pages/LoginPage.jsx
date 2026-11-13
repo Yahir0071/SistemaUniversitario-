@@ -14,19 +14,13 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    correoRef.current?.focus();
-  }, []);
-
+  useEffect(() => { correoRef.current?.focus(); }, []);
   const destino = location.state?.from || '/catalogo';
 
   const manejarSubmit = (e) => {
     e.preventDefault();
     const resultado = login(correo, password);
-    if (!resultado.ok) {
-      setError(resultado.error);
-      return;
-    }
+    if (!resultado.ok) { setError(resultado.error); return; }
     navigate(destino, { replace: true });
   };
 
@@ -37,56 +31,72 @@ export function LoginPage() {
   };
 
   return (
-    <div className="row justify-content-center py-4">
-      <div className="col-md-6 col-lg-5">
-        <div className="card card-plato shadow-sm">
-          <div className="card-body p-4">
-            <div className="d-flex align-items-center gap-2 mb-3">
-              <span className="brand-icon">🍴</span>
-              <h3 className="card-title fw-bold m-0">Iniciar Sesión</h3>
+    <div className="login-wrapper py-4">
+      <div className="w-100" style={{ maxWidth: '440px' }}>
+        <div className="card card-login p-4 p-md-5">
+          <div className="text-center mb-4">
+            <span className="brand-icon mx-auto mb-3" style={{ width: '52px', height: '52px', fontSize: '1.6rem' }}>🍴</span>
+            <div className="d-inline-flex align-items-center gap-1 px-3 py-1 rounded-pill bg-body-tertiary border mb-2 small fw-semibold">
+              <span className="text-success">●</span> Portal Estudiantil
             </div>
-            <p className="text-body-secondary small mb-4">
-              Accede con tu cuenta institucional <code>@utp.edu.pe</code> para registrar pedidos.
+            <h2 className="fw-bold fs-3 mb-1">Acceso FoodCampus</h2>
+            <p className="text-body-secondary small mb-0">
+              Ingresa con tu correo institucional UTP para gestionar tus órdenes.
             </p>
-
-            {error && <div className="alert alert-danger">{error}</div>}
-
-            <form onSubmit={manejarSubmit} noValidate>
-              <div className="mb-3">
-                <label className="form-label" htmlFor="correo">Correo institucional</label>
-                <input
-                  id="correo"
-                  ref={correoRef}
-                  type="email"
-                  className="form-control rounded-pill px-3"
-                  placeholder="u20231234@utp.edu.pe"
-                  value={correo}
-                  onChange={(e) => { setCorreo(e.target.value); setError(''); }}
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="form-label" htmlFor="password">Contraseña</label>
-                <input
-                  id="password"
-                  type="password"
-                  className="form-control rounded-pill px-3"
-                  placeholder="••••••"
-                  value={password}
-                  onChange={(e) => { setPassword(e.target.value); setError(''); }}
-                />
-              </div>
-
-              <div className="d-grid gap-2">
-                <button type="submit" className="btn btn-primary rounded-pill py-2">
-                  Ingresar al portal
-                </button>
-                <button type="button" className="btn btn-outline-secondary rounded-pill btn-sm" onClick={cargarDemo}>
-                  Autocompletar cuenta demo (Luis Quispe)
-                </button>
-              </div>
-            </form>
           </div>
+
+          {error && <div className="alert alert-danger rounded-3 py-2 small mb-3">{error}</div>}
+
+          <form onSubmit={manejarSubmit} noValidate>
+            <div className="mb-3">
+              <label className="form-label small fw-semibold text-uppercase text-body-secondary d-flex justify-content-between" htmlFor="correo">
+                <span>Correo Institucional</span>
+                <span className="text-muted" style={{ fontSize: '0.72rem' }}>@utp.edu.pe</span>
+              </label>
+              <input
+                id="correo" ref={correoRef} type="email"
+                className="form-control" placeholder="u20231234@utp.edu.pe"
+                value={correo} onChange={(e) => { setCorreo(e.target.value); setError(''); }}
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="form-label small fw-semibold text-uppercase text-body-secondary" htmlFor="password">
+                Contraseña
+              </label>
+              <input
+                id="password" type="password"
+                className="form-control" placeholder="••••••••"
+                value={password} onChange={(e) => { setPassword(e.target.value); setError(''); }}
+              />
+            </div>
+
+            <button type="submit" className="btn btn-primary rounded-pill py-2 w-100 fw-semibold mb-4">
+              Iniciar Sesión →
+            </button>
+
+            <div className="demo-account-card mb-3" onClick={cargarDemo} role="button">
+              <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-center gap-2">
+                  <span className="badge rounded-circle text-white d-flex align-items-center justify-content-center"
+                    style={{ width: '28px', height: '28px', fontSize: '0.75rem', background: 'var(--fc-primary)' }}>
+                    LQ
+                  </span>
+                  <div className="text-start">
+                    <div className="small fw-bold">Luis Quispe · Demo</div>
+                    <div className="text-muted" style={{ fontSize: '0.72rem' }}>u20231234@utp.edu.pe</div>
+                  </div>
+                </div>
+                <span className="badge rounded-pill text-white px-2 py-1" style={{ fontSize: '0.7rem', background: 'var(--fc-primary)' }}>
+                  Auto-rellenar ⚡
+                </span>
+              </div>
+            </div>
+
+            <div className="text-center text-muted small" style={{ fontSize: '0.75rem' }}>
+              🔒 Acceso seguro con validación institucional FoodCampus
+            </div>
+          </form>
         </div>
       </div>
     </div>
