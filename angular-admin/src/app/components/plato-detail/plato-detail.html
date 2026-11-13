@@ -1,30 +1,72 @@
 @if (plato(); as p) {
-  <div class="card col-md-8 shadow-sm">
-    <div class="card-body">
-      <div class="d-flex justify-content-between align-items-start">
-        <h3 class="card-title text-primary">{{ p.nombre }}</h3>
-        <span class="badge fs-6 bg-secondary">{{ p.categoria }}</span>
+  <div>
+    <nav class="small text-muted-fc mb-3">
+      <a routerLink="/platos" class="text-decoration-none text-muted-fc">Menú de Platos</a>
+      &rsaquo;
+      <span class="fw-semibold" style="color: var(--ink)">{{ p.nombre }}</span>
+    </nav>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="position-relative overflow-hidden mb-4" style="height: 340px; border-radius: 24px; box-shadow: var(--card-shadow-lg)">
+          <img [src]="imagen(p.id, p.imagen)" [alt]="p.nombre" class="w-100 h-100 object-fit-cover" />
+          <span
+            class="position-absolute top-0 start-0 m-3 badge rounded-pill px-3 py-2"
+            style="background: rgba(20, 17, 13, 0.72); color: #fff; backdrop-filter: blur(8px)"
+          >
+            {{ p.categoria }}
+          </span>
+          <span
+            class="position-absolute top-0 end-0 m-3 badge rounded-pill px-3 py-2"
+            [class.bg-success]="p.estado === 'disponible'"
+            [class.bg-warning]="p.estado === 'agotado'"
+            [class.text-dark]="p.estado === 'agotado'"
+          >
+            {{ p.estado }}
+          </span>
+        </div>
+
+        <h1 class="fw-bold mb-3">{{ p.nombre }}</h1>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <span class="fc-meta-chip">⏱️ 15-20 min</span>
+          <span class="fc-meta-chip">🔥 Servido caliente</span>
+          <span class="fc-meta-chip">📍 Módulo Central</span>
+        </div>
+
+        <h6 class="fw-bold text-uppercase small text-muted-fc mb-2">Ingredientes y Guarniciones</h6>
+        <div class="d-flex flex-wrap gap-2">
+          @for (ing of p.ingredientes; track ing) {
+            <span class="fc-meta-chip">✓ {{ ing }}</span>
+          }
+        </div>
       </div>
-      <h4 class="text-success mt-2">S/ {{ p.precio.toFixed(2) }}</h4>
-      <p class="mt-3">
-        <strong>Estado:</strong> 
-        <span class="badge" [class.bg-success]="p.estado === 'disponible'" [class.bg-warning]="p.estado === 'agotado'">
-          {{ p.estado }}
-        </span>
-      </p>
-      <p><strong>Ingredientes / Guarniciones:</strong></p>
-      <ul>
-        @for (ing of p.ingredientes; track ing) {
-          <li>{{ ing }}</li>
-        }
-      </ul>
-      <hr />
-      <a class="btn btn-outline-secondary me-2" routerLink="/platos">← Volver al Menú</a>
-      <a class="btn btn-primary" [routerLink]="['/platos', p.id, 'editar']">Editar Plato</a>
+
+      <div class="col-lg-5">
+        <div class="fc-card-lg p-4">
+          <div class="text-muted-fc small">Precio oficial en menú</div>
+          <div class="fs-2 fw-bold text-brand mb-3">S/ {{ p.precio.toFixed(2) }}</div>
+
+          <div class="py-3 mb-3 border-top border-bottom" style="border-color: var(--line)">
+            <div class="d-flex justify-content-between small mb-1">
+              <span class="text-muted-fc">Categoría</span>
+              <span class="fw-semibold">{{ p.categoria }}</span>
+            </div>
+            <div class="d-flex justify-content-between small">
+              <span class="text-muted-fc">Disponibilidad</span>
+              <span class="fw-semibold">{{ p.estado }}</span>
+            </div>
+          </div>
+
+          <div class="d-grid gap-2">
+            <a class="btn fc-btn-brand py-2" [routerLink]="['/platos', p.id, 'editar']">Editar Plato</a>
+            <a class="btn fc-btn-outline py-2" routerLink="/platos">← Volver al Menú</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 } @else if (error()) {
-  <div class="alert alert-danger">{{ error() }}</div>
+  <div class="alert alert-danger rounded-4">{{ error() }}</div>
 } @else {
-  <p>Cargando información del plato...</p>
+  <div class="fc-card p-4 text-muted-fc">Cargando información del plato...</div>
 }

@@ -1,50 +1,75 @@
-<h2>Órdenes y Pedidos del Campus</h2>
+<div class="mb-3">
+  <h2 class="fw-bold mb-1">Órdenes y Pedidos del Campus</h2>
+  <p class="text-muted-fc small mb-0">Supervisión en vivo de las solicitudes realizadas por los estudiantes.</p>
+</div>
+
+<div class="d-flex flex-wrap gap-2 mb-4">
+  <button type="button" class="fc-chip" [class.active]="filtro() === 'todos'" (click)="filtro.set('todos')">
+    Todos ({{ pedidos().length }})
+  </button>
+  <button type="button" class="fc-chip" [class.active]="filtro() === 'pendiente'" (click)="filtro.set('pendiente')">
+    ⏳ Pendientes ({{ contar('pendiente') }})
+  </button>
+  <button type="button" class="fc-chip" [class.active]="filtro() === 'aprobada'" (click)="filtro.set('aprobada')">
+    👨‍🍳 En preparación ({{ contar('aprobada') }})
+  </button>
+  <button type="button" class="fc-chip" [class.active]="filtro() === 'rechazada'" (click)="filtro.set('rechazada')">
+    ❌ Cancelados ({{ contar('rechazada') }})
+  </button>
+</div>
 
 @if (error()) {
-  <div class="alert alert-danger">{{ error() }}</div>
+  <div class="alert alert-danger rounded-4">{{ error() }}</div>
 }
 
-<table class="table table-hover align-middle">
-  <thead>
-    <tr>
-      <th>Código</th>
-      <th>Plato solicitado</th>
-      <th>Alumno</th>
-      <th>Fecha</th>
-      <th>Cantidad</th>
-      <th>Total</th>
-      <th>Notas</th>
-      <th>Estado</th>
-      <th class="text-end">Acción</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (ped of pedidos(); track ped.id) {
-      <tr>
-        <td><strong>{{ ped.codigo }}</strong></td>
-        <td>{{ nombrePlato(ped.platoId) }}</td>
-        <td>#{{ ped.usuarioId }}</td>
-        <td>{{ ped.fecha }}</td>
-        <td>{{ ped.cantidad }} unid.</td>
-        <td><strong>S/ {{ ped.precioTotal.toFixed(2) }}</strong></td>
-        <td><small class="text-muted">{{ ped.notas || 'Sin notas' }}</small></td>
-        <td>
-          <span class="badge" [ngClass]="{
-            'text-bg-success': ped.estado === 'aprobada',
-            'text-bg-warning': ped.estado === 'pendiente',
-            'text-bg-danger': ped.estado === 'rechazada'
-          }">{{ ped.estado | estadoPedido }}</span>
-        </td>
-        <td class="text-end">
-          @if (ped.estado === 'pendiente') {
-            <button class="btn btn-sm btn-outline-danger" (click)="cancelar(ped)">Cancelar</button>
-          }
-        </td>
+<div class="fc-card p-2 table-responsive">
+  <table class="table fc-table table-hover align-middle mb-0">
+    <thead>
+      <tr class="small text-muted-fc">
+        <th>Código</th>
+        <th>Plato solicitado</th>
+        <th>Alumno</th>
+        <th>Fecha</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+        <th>Notas</th>
+        <th>Estado</th>
+        <th class="text-end">Acción</th>
       </tr>
-    } @empty {
-      <tr>
-        <td colspan="9" class="text-center text-muted">No hay pedidos registrados</td>
-      </tr>
-    }
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      @for (ped of pedidosFiltrados(); track ped.id) {
+        <tr>
+          <td><strong class="font-monospace">{{ ped.codigo }}</strong></td>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <img [src]="imagen(ped.platoId)" alt="" class="fc-thumb-sm" />
+              <span class="fw-semibold small">{{ nombrePlato(ped.platoId) }}</span>
+            </div>
+          </td>
+          <td class="small text-muted-fc">#{{ ped.usuarioId }}</td>
+          <td class="small">{{ ped.fecha }}</td>
+          <td class="small">{{ ped.cantidad }} unid.</td>
+          <td><strong class="text-brand">S/ {{ ped.precioTotal.toFixed(2) }}</strong></td>
+          <td><small class="text-muted-fc">{{ ped.notas || 'Sin notas' }}</small></td>
+          <td>
+            <span class="badge rounded-pill px-2 py-1" [ngClass]="{
+              'text-bg-success': ped.estado === 'aprobada',
+              'text-bg-warning': ped.estado === 'pendiente',
+              'text-bg-danger': ped.estado === 'rechazada'
+            }">{{ ped.estado | estadoPedido }}</span>
+          </td>
+          <td class="text-end">
+            @if (ped.estado === 'pendiente') {
+              <button class="btn btn-sm btn-outline-danger rounded-pill px-3" (click)="cancelar(ped)">Cancelar</button>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="9" class="text-center text-muted-fc py-4">No hay pedidos registrados en este filtro</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Plato } from '../../models/interfaces';
 import { PlatoService } from '../../services/plato.service';
+import { obtenerImagenPlato } from '../../utils/platos-imagenes';
 
 @Component({
   selector: 'app-plato-detail',
@@ -21,5 +22,9 @@ export class PlatoDetail implements OnInit {
       next: (data) => this.plato.set(data),
       error: () => this.error.set('Plato no encontrado en el menú'),
     });
+  }
+
+  imagen(id?: number, url?: string) {
+    return obtenerImagenPlato(id, url);
   }
 }

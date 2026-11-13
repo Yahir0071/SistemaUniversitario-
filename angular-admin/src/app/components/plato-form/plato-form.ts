@@ -26,6 +26,7 @@ export class PlatoForm implements OnInit {
     precio: [12.0, [Validators.required, Validators.min(0.5), Validators.max(100)]],
     ingredientes: [''],
     estado: ['disponible' as Plato['estado']],
+    imagen: [''],
   });
 
   ngOnInit() {
@@ -33,7 +34,7 @@ export class PlatoForm implements OnInit {
     if (!param) return;
     this.id.set(Number(param));
     this.servicio.obtener(this.id()!).subscribe({
-      next: (p) => this.form.patchValue({ ...p, ingredientes: p.ingredientes.join(', ') }),
+      next: (p) => this.form.patchValue({ ...p, ingredientes: p.ingredientes.join(', '), imagen: p.imagen ?? '' }),
       error: () => this.error.set('No se pudo cargar el plato'),
     });
   }

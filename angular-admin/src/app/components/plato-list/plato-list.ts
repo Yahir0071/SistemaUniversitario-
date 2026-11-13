@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Plato } from '../../models/interfaces';
 import { PlatoService } from '../../services/plato.service';
 import { ResaltarDirective } from '../../directives/resaltar.directive';
+import { obtenerImagenPlato } from '../../utils/platos-imagenes';
 
 @Component({
   selector: 'app-plato-list',
@@ -27,6 +28,15 @@ export class PlatoList implements OnInit {
       next: (todos) => this.categorias.set([...new Set(todos.map((p) => p.categoria))]),
       error: () => this.error.set('No se pudo conectar con el API de FoodCampus (¿corre npm run api?)'),
     });
+    this.cargar();
+  }
+
+  imagen(id?: number, url?: string) {
+    return obtenerImagenPlato(id, url);
+  }
+
+  seleccionarCategoria(cat: string) {
+    this.categoria = this.categoria === cat ? '' : cat;
     this.cargar();
   }
 

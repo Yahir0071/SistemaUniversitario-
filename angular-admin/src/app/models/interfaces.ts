@@ -16,6 +16,7 @@ export interface Plato {
   precio: number;
   ingredientes: string[];
   estado: EstadoPlato;
+  imagen?: string;
 }
 
 export interface Pedido {

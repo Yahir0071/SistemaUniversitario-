@@ -1,61 +1,79 @@
-<h2>{{ id() ? 'Editar' : 'Nuevo' }} plato</h2>
+<div class="d-flex justify-content-center py-2">
+  <div class="fc-card-lg p-4 p-md-5 w-100" style="max-width: 680px">
+    <div class="mb-4">
+      <h2 class="fw-bold mb-1">{{ id() ? 'Editar' : 'Nuevo' }} plato</h2>
+      <p class="text-muted-fc small mb-0">
+        Completa los datos del catálogo respetando el formato de nombre y rango de precio.
+      </p>
+    </div>
 
-<form [formGroup]="form" (ngSubmit)="guardar()" class="col-md-6">
-  <div class="mb-3">
-    <label class="form-label">Nombre del plato (ej. Lomo Saltado Criollo)</label>
-    <input class="form-control" formControlName="nombre" [class.is-invalid]="invalido('nombre')" />
-    @if (invalido('nombre')) {
-      <div class="invalid-feedback">
-        @if (form.controls.nombre.errors?.['required']) {
-          El nombre es obligatorio
-        } @else {
-          Formato inválido: debe iniciar con mayúscula y tener mínimo 3 caracteres
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="mb-3">
+        <label class="form-label small fw-semibold">Nombre del plato (ej. Lomo Saltado Criollo)</label>
+        <input class="form-control fc-input" formControlName="nombre" [class.is-invalid]="invalido('nombre')" />
+        @if (invalido('nombre')) {
+          <div class="invalid-feedback">
+            @if (form.controls.nombre.errors?.['required']) {
+              El nombre es obligatorio
+            } @else {
+              Formato inválido: debe iniciar con mayúscula y tener mínimo 3 caracteres
+            }
+          </div>
         }
       </div>
-    }
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Categoría</label>
+          <select class="form-select fc-input" formControlName="categoria" [class.is-invalid]="invalido('categoria')">
+            <option value="">Seleccione una categoría</option>
+            <option value="Almuerzos">Almuerzos</option>
+            <option value="Desayunos">Desayunos</option>
+            <option value="Snacks">Snacks</option>
+            <option value="Saludable">Saludable</option>
+            <option value="Bebidas">Bebidas</option>
+            <option value="Postres">Postres</option>
+          </select>
+          @if (invalido('categoria')) {
+            <div class="invalid-feedback">La categoría es obligatoria</div>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Precio en S/. (0.50 a 100.00)</label>
+          <input type="number" step="0.50" class="form-control fc-input" formControlName="precio" [class.is-invalid]="invalido('precio')" />
+          @if (invalido('precio')) {
+            <div class="invalid-feedback">Ingrese un precio válido entre S/ 0.50 y S/ 100.00</div>
+          }
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label small fw-semibold">Ingredientes (separados por coma)</label>
+        <input class="form-control fc-input" formControlName="ingredientes" placeholder="Ej. Arroz, Carne, Papas fritas" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label small fw-semibold">Estado en menú</label>
+        <select class="form-select fc-input" formControlName="estado">
+          <option value="disponible">Disponible</option>
+          <option value="agotado">Agotado</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label small fw-semibold">URL de imagen (opcional)</label>
+        <input class="form-control fc-input" formControlName="imagen" placeholder="https://... (si lo dejas vacío se asigna una foto por defecto)" />
+      </div>
+
+      @if (error()) {
+        <div class="alert alert-danger rounded-4">{{ error() }}</div>
+      }
+
+      <div class="d-flex gap-2">
+        <button class="btn fc-btn-brand px-4 py-2" type="submit" [disabled]="form.invalid">Guardar plato</button>
+        <a class="btn fc-btn-outline px-4 py-2" routerLink="/platos">Cancelar</a>
+      </div>
+    </form>
   </div>
-
-  <div class="mb-3">
-    <label class="form-label">Categoría</label>
-    <select class="form-select" formControlName="categoria" [class.is-invalid]="invalido('categoria')">
-      <option value="">Seleccione una categoría</option>
-      <option value="Almuerzos">Almuerzos</option>
-      <option value="Desayunos">Desayunos</option>
-      <option value="Snacks">Snacks</option>
-      <option value="Saludable">Saludable</option>
-      <option value="Bebidas">Bebidas</option>
-      <option value="Postres">Postres</option>
-    </select>
-    @if (invalido('categoria')) {
-      <div class="invalid-feedback">La categoría es obligatoria</div>
-    }
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Precio en S/. (0.50 a 100.00)</label>
-    <input type="number" step="0.50" class="form-control" formControlName="precio" [class.is-invalid]="invalido('precio')" />
-    @if (invalido('precio')) {
-      <div class="invalid-feedback">Ingrese un precio válido entre S/ 0.50 y S/ 100.00</div>
-    }
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Ingredientes (separados por coma)</label>
-    <input class="form-control" formControlName="ingredientes" placeholder="Ej. Arroz, Carne, Papas fritas" />
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Estado</label>
-    <select class="form-select" formControlName="estado">
-      <option value="disponible">Disponible</option>
-      <option value="agotado">Agotado</option>
-    </select>
-  </div>
-
-  @if (error()) {
-    <div class="alert alert-danger">{{ error() }}</div>
-  }
-
-  <button class="btn btn-primary me-2" type="submit" [disabled]="form.invalid">Guardar</button>
-  <a class="btn btn-outline-secondary" routerLink="/platos">Cancelar</a>
-</form>
+</div>

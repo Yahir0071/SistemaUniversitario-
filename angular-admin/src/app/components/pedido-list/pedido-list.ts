@@ -1,10 +1,11 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { forkJoin } from 'rxjs';
-import { Pedido } from '../../models/interfaces';
+import { EstadoPedido, Pedido } from '../../models/interfaces';
 import { PedidoService } from '../../services/pedido.service';
 import { PlatoService } from '../../services/plato.service';
 import { EstadoPedidoPipe } from '../../pipes/estado-pedido.pipe';
+import { obtenerImagenPlato } from '../../utils/platos-imagenes';
 
 @Component({
   selector: 'app-pedido-list',
@@ -18,7 +19,14 @@ export class PedidoList implements OnInit {
 
   pedidos = signal<Pedido[]>([]);
   nombres = signal<Map<number, string>>(new Map());
+  filtro = signal<'todos' | EstadoPedido>('todos');
   error = signal('');
+
+  pedidosFiltrados = computed(() => {
+    const f = this.filtro();
+    const lista = this.pedidos();
+    return f === 'todos' ? lista : lista.filter((p) => p.estado === f);
+  });
 
   ngOnInit() {
     forkJoin({ pedidos: this.pedidoSrv.listar(), platos: this.platoSrv.listar() }).subscribe({
@@ -32,6 +40,14 @@ export class PedidoList implements OnInit {
 
   nombrePlato(id: number) {
     return this.nombres().get(id) ?? `Plato #${id}`;
+  }
+
+  imagen(id: number) {
+    return obtenerImagenPlato(id);
+  }
+
+  contar(estado: EstadoPedido) {
+    return this.pedidos().filter((p) => p.estado === estado).length;
   }
 
   cancelar(ped: Pedido) {
