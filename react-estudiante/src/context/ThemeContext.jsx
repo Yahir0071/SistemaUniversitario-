@@ -14,6 +14,7 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-bs-theme', tema);
+    document.documentElement.classList.toggle('dark', tema === 'dark');
     try {
       localStorage.setItem(STORAGE_KEY, tema);
     } catch {

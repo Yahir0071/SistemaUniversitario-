@@ -1,94 +1,94 @@
+import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useTheme } from '../context/ThemeContext.jsx';
 
+const obtenerIniciales = (nombre = '') =>
+  nombre.split(' ').filter(Boolean).slice(0, 2).map((p) => p[0].toUpperCase()).join('') || 'FC';
+
 export function Navbar({ marca = 'FoodCampus' }) {
   const { usuario, estaAutenticado, logout } = useAuth();
   const { esOscuro, alternarTema } = useTheme();
+  const [menuAbierto, setMenuAbierto] = useState(false);
   const navigate = useNavigate();
 
   const manejarSalida = () => {
+    setMenuAbierto(false);
     logout();
     navigate('/login');
   };
 
-  const iniciales = usuario?.nombre ? usuario.nombre.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase() : 'U';
-
   return (
-    <nav className="navbar navbar-expand-md navbar-custom sticky-top">
-      <div className="container">
-        <Link className="navbar-brand d-flex align-items-center gap-2 fw-bold text-decoration-none" to="/">
-          <span className="brand-icon">🍴</span>
-          <span className="fs-5">
-            {marca.startsWith('Food') ? (
-              <>Food<span style={{ color: 'var(--fc-primary)' }}>{marca.slice(4)}</span></>
-            ) : (
-              marca
-            )}
+    <header className="fc-navbar d-flex align-items-center py-2">
+      <div className="container d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <Link className="d-flex align-items-center gap-2 text-decoration-none" to="/">
+          <span className="fc-squircle" aria-hidden="true">🍴</span>
+          <span className="fs-5 fw-bold" style={{ color: 'var(--ink)' }}>
+            {marca.startsWith('Food') ? <>Food<span className="text-brand">{marca.slice(4)}</span></> : marca}
           </span>
         </Link>
 
-        <div className="d-flex flex-wrap align-items-center gap-3 flex-grow-1 justify-content-between mt-2 mt-md-0">
-          <ul className="navbar-nav flex-row gap-2 gap-md-3">
-            <li className="nav-item">
-              <NavLink className="nav-link px-2 fw-medium" to="/" end>
-                Inicio
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link px-2 fw-medium" to="/catalogo">
-                Catálogo
-              </NavLink>
-            </li>
-            {estaAutenticado && (
-              <>
-                <li className="nav-item">
-                  <NavLink className="nav-link px-2 fw-medium" to="/mis-pedidos">
-                    Mis Pedidos
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link px-2 fw-medium" to="/nuevo-pedido">
-                    Nuevo Pedido
-                  </NavLink>
-                </li>
-              </>
-            )}
-          </ul>
+        <nav className="fc-nav-pill-group order-3 order-lg-2 mx-auto mx-lg-0">
+          <NavLink className="fc-nav-link" to="/" end>Inicio</NavLink>
+          <NavLink className="fc-nav-link" to="/catalogo">Catálogo</NavLink>
+          {estaAutenticado && <NavLink className="fc-nav-link" to="/mis-pedidos">Mis pedidos</NavLink>}
+        </nav>
 
-          <div className="d-flex align-items-center gap-2">
-            <button
-              type="button"
-              className="btn btn-sm btn-outline-secondary rounded-pill px-3"
-              onClick={alternarTema}
-              title="Alternar tema claro/oscuro"
-            >
-              {esOscuro ? '☀️ Claro' : '🌙 Oscuro'}
-            </button>
+        <div className="d-flex align-items-center gap-2 order-2 order-lg-3 position-relative">
+          <button
+            type="button"
+            className="fc-theme-switch border-0"
+            onClick={alternarTema}
+            title={esOscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            aria-label="Cambiar tema"
+          >
+            <span className={`fc-theme-btn ${!esOscuro ? 'active' : ''}`}>☀️</span>
+            <span className={`fc-theme-btn ${esOscuro ? 'active' : ''}`}>🌙</span>
+          </button>
 
-            {estaAutenticado ? (
-              <div className="d-flex align-items-center gap-2">
-                <div className="d-none d-lg-flex align-items-center gap-2 px-2 py-1 rounded-pill bg-body-tertiary border">
-                  <span
-                    className="badge rounded-circle text-white d-flex align-items-center justify-content-center"
-                    style={{ width: '22px', height: '22px', fontSize: '0.7rem', background: 'var(--fc-primary)' }}
+          {estaAutenticado ? (
+            <>
+              <button
+                type="button"
+                className="fc-user-pill"
+                onClick={() => setMenuAbierto((v) => !v)}
+              >
+                <span className="fc-avatar">{obtenerIniciales(usuario.nombre)}</span>
+                <span className="small fw-semibold d-none d-sm-inline">{usuario.nombre.split(' ')[0]}</span>
+                <span className="small text-muted-fc d-none d-md-inline">{usuario.codigo}</span>
+                <span className="small text-muted-fc">▾</span>
+              </button>
+
+              {menuAbierto && (
+                <div className="fc-dropdown p-3">
+                  <div className="pb-2 mb-2 border-bottom" style={{ borderColor: 'var(--line)' }}>
+                    <div className="fw-bold small">{usuario.nombre}</div>
+                    <div className="text-muted-fc" style={{ fontSize: '0.78rem' }}>{usuario.codigo} · {usuario.correo}</div>
+                  </div>
+                  <Link
+                    className="btn btn-sm w-100 text-start mb-1 fc-btn-outline"
+                    to="/mis-pedidos"
+                    onClick={() => setMenuAbierto(false)}
                   >
-                    {iniciales}
-                  </span>
-                  <span className="small fw-semibold pe-1">{usuario.nombre}</span>
+                    🛍️ Mis pedidos
+                  </Link>
+                  <button
+                    type="button"
+                    className="btn btn-sm w-100 text-start text-danger fw-semibold"
+                    onClick={manejarSalida}
+                  >
+                    Cerrar sesión
+                  </button>
                 </div>
-                <button type="button" className="btn btn-sm btn-outline-danger rounded-pill px-3" onClick={manejarSalida}>
-                  Salir
-                </button>
-              </div>
-            ) : (
-              <Link className="btn btn-sm btn-primary rounded-pill px-3 fw-semibold" to="/login">
-                Iniciar sesión
-              </Link>
-            )}
-          </div>
+              )}
+            </>
+          ) : (
+            <Link className="btn btn-sm fc-btn-brand rounded-pill px-3 py-2" to="/login">
+              Iniciar sesión
+            </Link>
+          )}
         </div>
       </div>
-    </nav>
+    </header>
   );
 }

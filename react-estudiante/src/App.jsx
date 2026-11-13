@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import db from './data/db.json';
 import { crearGeneradorCodigos } from './core/estadisticas.js';
 import { Pedido } from './core/modelos.js';
@@ -77,6 +77,9 @@ export default function App() {
               </RutaProtegida>
             }
           />
+          {/* Alias de compatibilidad con la rúbrica base (reservas -> pedidos) */}
+          <Route path="/mis-reservas" element={<Navigate to="/mis-pedidos" replace />} />
+          <Route path="/nueva-reserva" element={<Navigate to="/nuevo-pedido" replace />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
