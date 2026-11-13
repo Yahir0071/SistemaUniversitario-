@@ -9,29 +9,31 @@ export function NuevoPedidoPage({ pedidos, onAgregar }) {
   const { usuario } = useAuth();
   const [searchParams] = useSearchParams();
   const platoInicialId = searchParams.get('platoId') ?? '';
+  const cantidadInicial = searchParams.get('cantidad') ?? 1;
 
   const misPedidos = pedidos.filter((p) => Number(p.usuarioId) === Number(usuario.id));
 
   return (
     <div>
-      <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+      <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
         <div>
-          <h2 className="m-0">Registrar Nuevo Pedido</h2>
-          <p className="text-body-secondary mb-0">
-            Solicita tu plato indicando fecha y hora de recojo en cafetería.
+          <h2 className="fw-bold mb-1">Registrar nuevo pedido</h2>
+          <p className="text-muted-fc small mb-0">
+            Elige fecha y horario de recojo para evitar filas en el Módulo Central.
           </p>
         </div>
-        <Link className="btn btn-outline-secondary" to="/mis-pedidos">
+        <Link className="btn fc-btn-outline px-3" to="/mis-pedidos">
           Ver mis pedidos
         </Link>
       </div>
 
       <FormularioPedido
-        key={platoInicialId}
+        key={`${platoInicialId}-${cantidadInicial}`}
         platos={db.platos}
         pedidosUsuario={misPedidos}
         usuarioId={usuario.id}
         platoInicialId={platoInicialId}
+        cantidadInicial={cantidadInicial}
         onGuardar={onAgregar}
       />
     </div>
