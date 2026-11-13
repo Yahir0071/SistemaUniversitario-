@@ -1,13 +1,27 @@
-<nav class="navbar navbar-expand navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-custom sticky-top">
   <div class="container">
-    <a class="navbar-brand" routerLink="/platos">🍔 FoodCampus Admin</a>
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/platos" routerLinkActive="active">Menú de Platos</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/pedidos" routerLinkActive="active">Pedidos</a>
-      </li>
-    </ul>
+    <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-decoration-none" routerLink="/platos">
+      <span class="brand-icon">🍴</span>
+      <span class="fs-5">Food<span style="color: var(--fc-primary)">Campus</span> <small class="text-secondary fw-normal" style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase;">Admin</small></span>
+    </a>
+
+    <div class="d-flex align-items-center gap-3">
+      <ul class="navbar-nav flex-row gap-2 gap-md-3 mb-0">
+        <li class="nav-item">
+          <a class="nav-link px-2" routerLink="/platos" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+            Menú de Platos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-2" routerLink="/pedidos" routerLinkActive="active">
+            Pedidos
+          </a>
+        </li>
+      </ul>
+
+      <span class="badge rounded-pill" style="background: var(--fc-primary-soft); color: var(--fc-primary); border: 1px solid rgba(255,107,53,0.2); font-size:0.72rem; font-weight:600; letter-spacing:0.05em; padding: 0.35rem 0.75rem;">
+        🛡️ ADMIN
+      </span>
+    </div>
   </div>
 </nav>

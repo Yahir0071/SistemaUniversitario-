@@ -1,11 +1,12 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Plato } from '../../models/interfaces';
 import { PlatoService } from '../../services/plato.service';
 
 @Component({
   selector: 'app-plato-detail',
-  imports: [RouterLink],
+  imports: [RouterLink, NgClass],
   templateUrl: './plato-detail.html',
   styleUrl: './plato-detail.css',
 })
