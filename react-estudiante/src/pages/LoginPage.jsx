@@ -16,14 +16,19 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const [verClave, setVerClave] = useState(false);
   const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(false);
 
   useEffect(() => { correoRef.current?.focus(); }, []);
 
   const destino = location.state?.from || '/catalogo';
 
-  const manejarSubmit = (e) => {
+  const manejarSubmit = async (e) => {
     e.preventDefault();
-    const resultado = login(correo, password);
+    if (cargando) return;
+    setCargando(true);
+    setError('');
+    const resultado = await login(correo, password);
+    setCargando(false);
     if (!resultado.ok) { setError(resultado.error); return; }
     navigate(destino, { replace: true });
   };
@@ -58,13 +63,13 @@ export function LoginPage() {
             <h2 className="fw-bold mb-1">Iniciar sesión</h2>
             <p className="text-muted-fc small mb-4">Usa tu correo institucional y la contraseña de tu cuenta UTP.</p>
 
-            {error && <div className="alert alert-danger rounded-4 small py-2">{error}</div>}
+            {error && <div className="alert alert-danger rounded-4 small py-2" role="alert">{error}</div>}
 
-            <form onSubmit={manejarSubmit} noValidate>
+            <form onSubmit={manejarSubmit} aria-busy={cargando}>
               <div className="mb-3">
                 <label className="form-label small fw-semibold" htmlFor="correo">Correo institucional</label>
                 <input
-                  id="correo" ref={correoRef} type="email" className="form-control fc-input"
+                  id="correo" ref={correoRef} type="email" autoComplete="email" readOnly={cargando} required className="form-control fc-input"
                   placeholder="u00000000@utp.edu.pe" value={correo}
                   onChange={(e) => { setCorreo(e.target.value); setError(''); }}
                 />
@@ -75,7 +80,7 @@ export function LoginPage() {
                 <label className="form-label small fw-semibold" htmlFor="password">Contraseña</label>
                 <div className="position-relative">
                   <input
-                    id="password" type={verClave ? 'text' : 'password'} className="form-control fc-input pe-5"
+                    id="password" autoComplete="current-password" readOnly={cargando} required type={verClave ? 'text' : 'password'} className="form-control fc-input pe-5"
                     placeholder="••••••" value={password}
                     onChange={(e) => { setPassword(e.target.value); setError(''); }}
                   />
@@ -83,18 +88,18 @@ export function LoginPage() {
                     type="button"
                     className="btn btn-sm position-absolute top-50 end-0 translate-middle-y me-2 text-muted-fc border-0"
                     onClick={() => setVerClave((v) => !v)}
-                    aria-label="Mostrar u ocultar contraseña"
+                    aria-label="Mostrar contraseña" aria-pressed={verClave}
                   >
                     {verClave ? '🙈' : '👁️'}
                   </button>
                 </div>
               </div>
 
-              <button type="submit" className="btn fc-btn-brand rounded-pill w-100 py-2 mb-3">Iniciar sesión</button>
+              <button type="submit" className="btn fc-btn-brand rounded-pill w-100 py-2 mb-3" disabled={cargando}>{cargando ? 'Consultando cuenta…' : 'Iniciar sesión'}</button>
             </form>
 
             <div className="p-3 rounded-4 border" style={{ backgroundColor: 'var(--surface-sunken)', borderColor: 'var(--line)' }}>
-              <button type="button" className="btn btn-sm fc-btn-outline w-100" onClick={cargarDemo}>
+              <button type="button" className="btn btn-sm fc-btn-outline w-100" onClick={cargarDemo} disabled={cargando}>
                 ℹ️ Usar cuenta demo: Luis Quispe (U20231234)
               </button>
             </div>

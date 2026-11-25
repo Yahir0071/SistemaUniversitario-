@@ -1,17 +1,21 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import db from '../data/db.json';
+import { usePlatos } from '../hooks/usePlatos.js';
+import { usePedidos } from '../hooks/usePedidos.js';
+import { EstadoConsulta } from '../components/EstadoConsulta.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useTituloPagina } from '../hooks/useTituloPagina.js';
 import { FormularioPedido } from '../components/FormularioPedido.jsx';
 
-export function NuevoPedidoPage({ pedidos, onAgregar }) {
+export function NuevoPedidoPage() {
   useTituloPagina('Nuevo Pedido');
   const { usuario } = useAuth();
   const [searchParams] = useSearchParams();
   const platoInicialId = searchParams.get('platoId') ?? '';
   const cantidadInicial = searchParams.get('cantidad') ?? 1;
 
-  const misPedidos = pedidos.filter((p) => Number(p.usuarioId) === Number(usuario.id));
+  const pedidos = usePedidos(usuario.id);
+  const menu = usePlatos();
+  const hayDisponibles = menu.datos.some((plato) => plato.estado === 'disponible');
 
   return (
     <div>
@@ -27,15 +31,21 @@ export function NuevoPedidoPage({ pedidos, onAgregar }) {
         </Link>
       </div>
 
-      <FormularioPedido
-        key={`${platoInicialId}-${cantidadInicial}`}
-        platos={db.platos}
-        pedidosUsuario={misPedidos}
-        usuarioId={usuario.id}
-        platoInicialId={platoInicialId}
-        cantidadInicial={cantidadInicial}
-        onGuardar={onAgregar}
-      />
+      <EstadoConsulta {...menu} mensajeCarga="Cargando menú…" />
+      <EstadoConsulta {...pedidos} mensajeCarga="Consultando tus pedidos para validar el horario…" />
+      {!menu.cargando && !menu.error && !hayDisponibles && <p className="text-muted-fc">No hay platos disponibles para pedir.</p>}
+      {hayDisponibles && !pedidos.cargando && !pedidos.error && (
+        <FormularioPedido
+          key={`${platoInicialId}-${cantidadInicial}`}
+          platos={menu.datos}
+          pedidosUsuario={pedidos.datos}
+          usuarioId={usuario.id}
+          platoInicialId={platoInicialId}
+          cantidadInicial={cantidadInicial}
+          onGuardar={pedidos.crear}
+          guardando={pedidos.guardando}
+        />
+      )}
     </div>
   );
 }

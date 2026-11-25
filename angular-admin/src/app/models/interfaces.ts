@@ -25,6 +25,7 @@ export interface Pedido {
   platoId: number;
   usuarioId: number;
   fecha: string;      // AAAA-MM-DD
+  hora?: string;
   cantidad: number;
   precioUnitario: number;
   precioTotal: number;

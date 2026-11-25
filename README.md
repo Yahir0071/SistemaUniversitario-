@@ -1,7 +1,7 @@
 # FoodCampus – Proyecto Integral (JavaScript Avanzado)
 
-**Repositorio:** [https://github.com/Yahir0071/SistemaUniversitario-](https://github.com/Yahir0071/SistemaUniversitario-)  
-**Dominio:** FoodCampus (Gestión de Menú, Platos y Pedidos de Cafetería Universitaria)  
+**Repositorio:** [https://github.com/Yahir0071/SistemaUniversitario-](https://github.com/Yahir0071/SistemaUniversitario-)
+**Dominio:** FoodCampus (Gestión de Menú, Platos y Pedidos de Cafetería Universitaria)
 
 ## Integrantes del Grupo
 | N° | Nombre Completo | Código UTP | Rol / Responsabilidad en Avance 1 y 2 |
@@ -41,14 +41,13 @@ npm start
 *Abre el panel administrativo en `http://localhost:4200` conectado a la API de `http://localhost:3000`.*
 *Para ejecutar las pruebas unitarias de Angular con Vitest:* `npm test`.
 
-### 4. Portal del Estudiante React + Vite (Puerto 5173) – Avance 2
-> **Nota de Avance 2:** En esta fase los datos son locales (copia importada de `db.json`); no requiere conexión externa obligatoria para navegar el catálogo y simular pedidos.
+### 4. Portal del Estudiante React + Vite (Puerto 5173)
+Levanta primero `api-mock`. React y Angular usan la misma API en `http://localhost:3000`.
 
 ```bash
 cd react-estudiante
 npm install # o npm ci
 npm run sync-core # sincroniza lógica y validadores de core-js
-npm run sync-data # sincroniza datos iniciales de db.json
 npm run dev
 ```
 *Abre la aplicación del estudiante en `http://localhost:5173`.*
@@ -99,6 +98,24 @@ El portal permite a los estudiantes navegar el catálogo de platos, filtrar por 
 
 ---
 
+## Avance 3 – Integración REST con Angular (Semana 15)
+
+| Herramienta | Uso en FoodCampus | Comportamiento |
+| --- | --- | --- |
+| Fetch API | `GET /platos`, `GET /platos/:id` y `GET /usuarios?correo=...` | `consultar` usa `async/await` y comprueba `response.ok`. El catálogo y el detalle muestran sus estados de carga, error y vacío. |
+| Axios | `POST /pedidos` y `DELETE /pedidos/:id` | Una instancia con `baseURL` traduce errores HTTP mediante un interceptor. El formulario muestra el ticket después de que la API guarda el pedido. |
+| Alova | `GET /pedidos?usuarioId=...` | `usePedidos(usuarioId)` utiliza `useRequest` y reutiliza `pedidosPorEstado` de `core-js`. La consulta se guarda 30 segundos en memoria por usuario. **Actualizar pedidos** fuerza una consulta y las operaciones de escritura invalidan la caché del estudiante. |
+
+El inicio de sesión simulado compara la clave en React y guarda el perfil sin contraseña en `AuthContext` y `localStorage`. El servidor simulado asigna el código `PED-XXXX` usando el generador de `core-js` y json-server persiste los pedidos en `api-mock/db.json`. El pedido conserva la hora de recojo y el total calculado con el modelo `Pedido`.
+
+### Demo de integración
+
+1. Inicia la API, Angular y React con los comandos anteriores. Abre **Pedidos** en Angular y entra a React con la cuenta de Luis Quispe.
+2. En React, abre **Nuevo pedido**, elige un plato disponible y selecciona una fecha y hora libres. Confirma y anota el código del ticket.
+3. En Angular, pulsa **Actualizar pedidos** y luego **Aprobar** en la fila con ese código. Angular envía `PATCH /pedidos/:id` con `{ "estado": "aprobada" }`.
+4. En React, abre **Mis pedidos** y pulsa **Actualizar pedidos**. La fila y el resumen muestran **En preparación**. Para probar **Rechazar**, registra otro pedido y repite el flujo con el estado `rechazada`.
+5. Para comprobar la cancelación, registra un pedido y cancélalo en React mientras siga pendiente. Tras `DELETE /pedidos/:id`, el pedido desaparece de React y del panel de Angular al actualizar.
+
 ## Pruebas de API (Postman / Thunder Client)
 La colección exportada se encuentra en:
 * `postman/campushub-avance1.postman_collection.json`
@@ -127,5 +144,5 @@ Incluye pruebas para los métodos HTTP sobre el dominio FoodCampus:
 
 ## Declaración de Uso de IA
 En cumplimiento de la Sección 13 del Proyecto Integral:
-* Se utilizaron asistentes de IA como soporte de análisis arquitectural, verificación de cobertura de pruebas unitarias y generación de plantillas de componentes.
+* Se utilizaron asistentes de IA para el análisis arquitectural, las pruebas, las plantillas de componentes y la implementación y verificación de la integración REST del Avance 3.
 * Todos los integrantes del grupo comprenden y están en capacidad de explicar, modificar y sustentar línea por línea el código presentado en cada módulo.

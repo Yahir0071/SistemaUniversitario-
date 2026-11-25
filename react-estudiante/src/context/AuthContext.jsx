@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import db from '../data/db.json';
+import { consultar } from '../services/api.js';
 import { Usuario } from '../core/modelos.js';
 import { esCorreoUTP } from '../core/validadores.js';
 
@@ -8,7 +8,7 @@ const SESSION_KEY = 'foodcampus_usuario';
 
 function leerSesionGuardada() {
   try {
-    const raw = sessionStorage.getItem(SESSION_KEY);
+    const raw = localStorage.getItem(SESSION_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
@@ -18,13 +18,19 @@ function leerSesionGuardada() {
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(leerSesionGuardada);
 
-  const login = (correo, password) => {
+  const login = async (correo, password) => {
     const correoLimpio = correo.trim().toLowerCase();
     if (!esCorreoUTP(correoLimpio)) {
       return { ok: false, error: 'Ingresa un correo institucional válido (@utp.edu.pe).' };
     }
 
-    const encontrado = db.usuarios.find(
+    let usuarios;
+    try {
+      usuarios = await consultar(`/usuarios?${new URLSearchParams({ correo: correoLimpio })}`);
+    } catch {
+      return { ok: false, error: 'No se pudo consultar la cuenta. Comprueba que la API esté en ejecución.' };
+    }
+    const encontrado = usuarios.find(
       (u) => u.correo.toLowerCase() === correoLimpio && u.password === password
     );
 
@@ -35,7 +41,7 @@ export function AuthProvider({ children }) {
     const perfil = new Usuario(encontrado).perfilPublico();
     setUsuario(perfil);
     try {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(perfil));
+      localStorage.setItem(SESSION_KEY, JSON.stringify(perfil));
     } catch {
       // Ignorar error de almacenamiento
     }
@@ -45,7 +51,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUsuario(null);
     try {
-      sessionStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(SESSION_KEY);
     } catch {
       // Ignorar error de almacenamiento
     }

@@ -3,7 +3,7 @@ const ESTILOS = {
   agotado: { bg: '#6b7280', text: '#ffffff', label: 'Agotado', dot: '○ ' },
   pendiente: { bg: '#f59e0b', text: '#1f160c', label: '⏳ Pendiente', dot: '' },
   aprobada: { bg: '#059669', text: '#ffffff', label: '👨‍🍳 En preparación', dot: '' },
-  rechazada: { bg: '#dc2626', text: '#ffffff', label: '✕ Cancelado', dot: '' },
+  rechazada: { bg: '#dc2626', text: '#ffffff', label: '✕ Rechazado', dot: '' },
 };
 
 export function BadgeEstado({ estado }) {

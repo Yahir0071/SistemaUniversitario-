@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import db from '../data/db.json';
+import { usePlatos } from '../hooks/usePlatos.js';
+import { EstadoConsulta } from '../components/EstadoConsulta.jsx';
 import { categoriasUnicas } from '../core/estadisticas.js';
 import { Plato } from '../core/modelos.js';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -15,11 +16,17 @@ export function CatalogoPage() {
   const [texto, setTexto] = useState('');
   const [soloDisponibles, setSoloDisponibles] = useState(false);
 
-  const categorias = categoriasUnicas(db.platos);
-  const disponibles = db.platos.filter((p) => new Plato(p).estaDisponible).length;
+  const consulta = usePlatos();
+  const platos = consulta.datos;
+  if (consulta.cargando || consulta.error) {
+    return <><h2 className="fw-bold">Catálogo de platos</h2><EstadoConsulta {...consulta} mensajeCarga="Cargando catálogo…" /></>;
+  }
+
+  const categorias = categoriasUnicas(platos);
+  const disponibles = platos.filter((p) => new Plato(p).estaDisponible).length;
   const query = texto.trim().toLowerCase();
 
-  const platosFiltrados = db.platos.filter((p) => {
+  const platosFiltrados = platos.filter((p) => {
     const modelo = new Plato(p);
     if (soloDisponibles && !modelo.estaDisponible) return false;
     if (categoria && p.categoria !== categoria) return false;
@@ -33,7 +40,7 @@ export function CatalogoPage() {
         <div>
           <h2 className="fw-bold mb-1">Catálogo de platos</h2>
           <p className="text-muted-fc small mb-0">
-            Menú de la cafetería universitaria · {db.platos.length} platos · {disponibles} disponibles
+            Menú de la cafetería universitaria · {platos.length} platos · {disponibles} disponibles
           </p>
         </div>
         <span className="badge rounded-pill px-3 py-2" style={{ backgroundColor: 'var(--brand-soft)', color: 'var(--brand-ink)' }}>
@@ -58,7 +65,7 @@ export function CatalogoPage() {
             </div>
 
             <input
-              type="search"
+              type="search" aria-label="Buscar plato"
               className="form-control fc-input mb-3"
               placeholder="🔍 Buscar plato..."
               value={texto}
@@ -69,7 +76,7 @@ export function CatalogoPage() {
             <div className="d-flex flex-lg-column flex-wrap gap-2 mb-3">
               <button type="button" className={`fc-chip justify-content-between ${!categoria ? 'active' : ''}`} onClick={() => setCategoria('')}>
                 <span>Todos</span>
-                <span className="fc-chip-count">{db.platos.length}</span>
+                <span className="fc-chip-count">{platos.length}</span>
               </button>
               {categorias.map((cat) => (
                 <button
@@ -79,7 +86,7 @@ export function CatalogoPage() {
                   onClick={() => setCategoria(cat === categoria ? '' : cat)}
                 >
                   <span>{cat}</span>
-                  <span className="fc-chip-count">{db.platos.filter((p) => p.categoria === cat).length}</span>
+                  <span className="fc-chip-count">{platos.filter((p) => p.categoria === cat).length}</span>
                 </button>
               ))}
             </div>

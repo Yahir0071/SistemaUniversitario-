@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
-import db from '../data/db.json';
+import { usePlatos } from '../hooks/usePlatos.js';
+import { EstadoConsulta } from '../components/EstadoConsulta.jsx';
 import { Plato } from '../core/modelos.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useTituloPagina } from '../hooks/useTituloPagina.js';
@@ -11,21 +12,21 @@ export function DetallePlatoPage() {
   const { id } = useParams();
   const { estaAutenticado } = useAuth();
 
-  const encontrado = db.platos.find((p) => Number(p.id) === Number(id));
-  useTituloPagina(encontrado ? encontrado.nombre : 'Plato no encontrado');
+  const consulta = usePlatos(id);
+  const menu = usePlatos();
+  const encontrado = consulta.datos;
+  useTituloPagina(encontrado?.nombre ?? 'Detalle del plato');
 
-  if (!encontrado) {
-    return (
-      <div className="fc-card p-4 text-center">
-        <h4 className="fw-bold">Plato no encontrado</h4>
-        <p className="text-muted-fc mb-3">El plato #{id} no figura en el menú.</p>
-        <Link className="btn fc-btn-brand px-4" to="/catalogo">← Volver al catálogo</Link>
-      </div>
-    );
+  if (consulta.cargando || (consulta.error && !consulta.noEncontrado)) {
+    return <EstadoConsulta {...consulta} mensajeCarga="Cargando plato…" />;
+  }
+
+  if (consulta.noEncontrado) {
+    return <PlatoNoEncontrado id={id} />;
   }
 
   const plato = new Plato(encontrado);
-  const relacionados = db.platos.filter((p) => p.id !== plato.id).slice(0, 3);
+  const relacionados = menu.datos.filter((p) => p.id !== plato.id).slice(0, 3);
   const descripcion = encontrado.descripcion || `Preparado al momento con ${plato.ingredientes.slice(0, 3).join(', ').toLowerCase()}.`;
 
   return (
@@ -109,11 +110,23 @@ export function DetallePlatoPage() {
       </div>
 
       <h4 className="h5 fw-bold mb-3">Otros platos que te pueden gustar</h4>
+      <EstadoConsulta {...menu} mensajeCarga="Cargando otros platos…" />
+      {!menu.cargando && !menu.error && !relacionados.length && <p className="text-muted-fc">No hay otros platos en el menú.</p>}
       <div className="row row-cols-1 row-cols-md-3 g-3">
         {relacionados.map((p) => (
           <div className="col" key={p.id}><TarjetaPlato plato={p} puedePedir={estaAutenticado} /></div>
         ))}
       </div>
+    </div>
+  );
+}
+
+function PlatoNoEncontrado({ id }) {
+  return (
+    <div className="fc-card p-4 text-center">
+      <h4 className="fw-bold">Plato no encontrado</h4>
+      <p className="text-muted-fc mb-3">El plato #{id} no figura en el menú.</p>
+      <Link className="btn fc-btn-brand px-4" to="/catalogo">← Volver al catálogo</Link>
     </div>
   );
 }

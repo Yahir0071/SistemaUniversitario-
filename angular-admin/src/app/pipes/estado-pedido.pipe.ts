@@ -4,7 +4,7 @@ import { EstadoPedido } from '../models/interfaces';
 const TEXTOS: Record<EstadoPedido, string> = {
   pendiente: '⏳ Pendiente',
   aprobada: '👨‍🍳 En Preparación',
-  rechazada: '❌ Cancelado',
+  rechazada: '❌ Rechazado',
 };
 
 @Pipe({ name: 'estadoPedido' })

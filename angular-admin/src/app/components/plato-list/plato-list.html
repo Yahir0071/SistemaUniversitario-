@@ -8,6 +8,8 @@
 
 <div class="mb-3">
   <input
+    type="search"
+    aria-label="Buscar plato por nombre"
     class="form-control fc-input"
     placeholder="🔍 Buscar plato por nombre..."
     [(ngModel)]="q"
@@ -30,16 +32,16 @@
   <div class="alert alert-danger rounded-4">{{ error() }}</div>
 }
 
-<div class="fc-card p-2 table-responsive">
+<div class="fc-card p-2 table-responsive" tabindex="0" role="region" aria-label="Tabla del menú de platos">
   <table class="table fc-table table-hover align-middle mb-0">
     <thead>
       <tr class="small text-muted-fc">
-        <th>Plato</th>
-        <th>Categoría</th>
-        <th>Precio</th>
-        <th>Ingredientes</th>
-        <th>Estado</th>
-        <th class="text-end">Acciones</th>
+        <th scope="col">Plato</th>
+        <th scope="col">Categoría</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Ingredientes</th>
+        <th scope="col">Estado</th>
+        <th scope="col" class="text-end">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -52,7 +54,7 @@
             </a>
           </td>
           <td><span class="fc-meta-chip">{{ plato.categoria }}</span></td>
-          <td><strong class="text-brand">S/ {{ plato.precio.toFixed(2) }}</strong></td>
+          <td><strong class="text-brand text-nowrap">S/ {{ plato.precio.toFixed(2) }}</strong></td>
           <td class="small text-muted-fc">{{ plato.ingredientes.join(' · ') }}</td>
           <td>
             <span class="badge rounded-pill px-2 py-1" [ngClass]="{

@@ -8,10 +8,11 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "sync-core": "node -e \"require('fs').cpSync('../core-js','src/core',{recursive:true})\"",
-    "sync-data": "node -e \"const fs=require('fs');fs.mkdirSync('src/data',{recursive:true});fs.cpSync('../api-mock/db.json','src/data/db.json')\""
+    "sync-core": "node -e \"require('fs').cpSync('../core-js','src/core',{recursive:true})\""
   },
   "dependencies": {
+    "alova": "^3.5.5",
+    "axios": "^1.21.1",
     "bootstrap": "^5.3.9",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

@@ -457,6 +457,31 @@ body {
   border: 1px solid var(--line);
 }
 
+.fc-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--ink);
+  --bs-table-border-color: var(--line-subtle);
+  --bs-table-hover-bg: var(--surface-raised);
+  --bs-table-hover-color: var(--ink);
+}
+
+.fc-table thead {
+  --bs-table-color: var(--ink-muted);
+}
+
+.fc-table .text-brand {
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-table .fc-thumb-sm {
+  flex-shrink: 0;
+}
+
+.fc-card.table-responsive:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
 .text-muted-fc {
   color: var(--ink-muted) !important;
 }

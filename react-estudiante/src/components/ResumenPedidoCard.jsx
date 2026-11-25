@@ -7,7 +7,7 @@ function formatearRecojo(fecha, hora) {
   return `${f} · ${hora || 'sin hora'}`;
 }
 
-export function ResumenPedidoCard({ platoActual, cantidad, fecha, hora, totalEstimado }) {
+export function ResumenPedidoCard({ platoActual, cantidad, fecha, hora, totalEstimado, guardando }) {
   return (
     <div className="fc-card-lg fc-sticky-panel overflow-hidden">
       {platoActual && (
@@ -32,7 +32,7 @@ export function ResumenPedidoCard({ platoActual, cantidad, fecha, hora, totalEst
           <span className="text-muted-fc">Total</span>
           <span className="fs-4 fw-bold">S/ {totalEstimado.toFixed(2)}</span>
         </div>
-        <button type="submit" className="btn fc-btn-brand w-100 py-2">Confirmar pedido</button>
+        <button type="submit" className="btn fc-btn-brand w-100 py-2" disabled={guardando}>{guardando ? 'Registrando…' : 'Confirmar pedido'}</button>
         <div className="small text-muted-fc text-center mt-2">Podrás cancelarlo mientras esté pendiente.</div>
       </div>
     </div>

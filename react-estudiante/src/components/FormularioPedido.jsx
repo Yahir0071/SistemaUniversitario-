@@ -18,7 +18,7 @@ const estadoInicial = (platos = [], platoId = '', cantidad = 1) => {
   };
 };
 
-export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInicialId = '', cantidadInicial = 1, onGuardar }) {
+export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInicialId = '', cantidadInicial = 1, onGuardar, guardando }) {
   const [form, setForm] = useState(() => estadoInicial(platos, platoInicialId, cantidadInicial));
   const [errores, setErrores] = useState({});
   const [confirmado, setConfirmado] = useState(null);
@@ -35,18 +35,23 @@ export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInici
     setErrores((prev) => ({ ...prev, [campo]: undefined, general: undefined }));
   };
 
-  const manejarEnvio = (e) => {
+  const manejarEnvio = async (e) => {
     e.preventDefault();
+    if (guardando) return;
     const { errores: errs, valido } = validarFormularioPedido(form, platos, pedidosUsuario, usuarioId);
     if (!valido) { setErrores(errs); return; }
-    const creado = onGuardar({
-      platoId: Number(form.platoId), fecha: form.fecha, hora: form.hora,
-      cantidad: Number(form.cantidad), precioUnitario: platoActual.precio, notas: form.notas.trim(),
-    });
-    setConfirmado({ pedido: creado, plato: platoActual, nombrePlato: platoActual.nombre });
-    setErrores({});
-    setForm(estadoInicial(platos, '', 1));
-    setCambiarPlato(false);
+    try {
+      const creado = await onGuardar({
+        platoId: Number(form.platoId), fecha: form.fecha, hora: form.hora,
+        cantidad: Number(form.cantidad), precioUnitario: platoActual.precio, notas: form.notas.trim(),
+      });
+      setConfirmado({ pedido: creado, plato: platoActual, nombrePlato: platoActual.nombre });
+      setErrores({});
+      setForm(estadoInicial(platos, '', 1));
+      setCambiarPlato(false);
+    } catch (error) {
+      setErrores({ general: error.message });
+    }
   };
 
   if (confirmado) {
@@ -54,15 +59,15 @@ export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInici
   }
 
   return (
-    <form onSubmit={manejarEnvio} noValidate className="row g-4 align-items-start">
+    <form onSubmit={manejarEnvio} aria-busy={guardando} noValidate className="row g-4 align-items-start">
       <div className="col-lg-8">
-        {errores.general && <div className="alert alert-danger rounded-4 mb-3">{errores.general}</div>}
+        {errores.general && <div className="alert alert-danger rounded-4 mb-3" role="alert">{errores.general}</div>}
 
         <div className="fc-card p-4 mb-3">
           {platoActual && (
-            <div className="d-flex justify-content-between align-items-center gap-3">
+            <div className="d-flex flex-wrap justify-content-between align-items-center gap-3">
               <div className="d-flex align-items-center gap-3">
-                <img src={obtenerImagenPlato(platoActual.id, platoActual.imagen)} alt="" className="fc-thumb-sm" style={{ width: '58px', height: '58px' }} />
+                <img src={obtenerImagenPlato(platoActual.id, platoActual.imagen)} alt="" className="fc-thumb-sm flex-shrink-0" style={{ width: '58px', height: '58px' }} />
                 <div>
                   <div className="text-uppercase text-muted-fc fw-bold" style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>Plato elegido</div>
                   <div className="fw-bold">{platoActual.nombre}</div>
@@ -111,7 +116,7 @@ export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInici
       </div>
 
       <div className="col-lg-4">
-        <ResumenPedidoCard platoActual={platoActual} cantidad={form.cantidad} fecha={form.fecha} hora={form.hora} totalEstimado={totalEstimado} />
+        <ResumenPedidoCard platoActual={platoActual} cantidad={form.cantidad} fecha={form.fecha} hora={form.hora} totalEstimado={totalEstimado} guardando={guardando} />
       </div>
     </form>
   );

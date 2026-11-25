@@ -1,6 +1,6 @@
 # FoodCampus – Portal del Estudiante (React + Vite)
 
-Aplicación SPA desarrollada en **React 19 + Vite + Bootstrap 5.3** correspondiente al **Avance 2 (Semana 14)** del Proyecto Integral de JavaScript Avanzado.
+Aplicación SPA desarrollada en **React 19 + Vite + Bootstrap 5.3** actualizada para el **Avance 3 (Semana 15)** del Proyecto Integral de JavaScript Avanzado.
 
 Permite a los estudiantes navegar el catálogo de platos de la cafetería universitaria, buscar por nombre o ingrediente, filtrar por categorías, alternar tema claro/oscuro, iniciar sesión con su correo institucional `@utp.edu.pe` y registrar pedidos controlados con validaciones de negocio en tiempo real.
 
@@ -13,11 +13,12 @@ Permite a los estudiantes navegar el catálogo de platos de la cafetería univer
 npm install
 ```
 
-### 2. Sincronización de Núcleo y Datos Locales
+### 2. Sincronización del núcleo y arranque de la API
 ```bash
 npm run sync-core   # Sincroniza la lógica de dominio y validadores desde ../core-js
-npm run sync-data   # Sincroniza los datos iniciales de ../api-mock/db.json
 ```
+
+En otra terminal, ejecuta `npm ci` y `npm run api` en `api-mock`. React consulta `http://localhost:3000` por defecto. Si necesitas otra URL, configura `VITE_API_URL` antes de arrancar Vite.
 
 ### 3. Iniciar el Servidor de Desarrollo
 ```bash
@@ -66,11 +67,18 @@ Todos los componentes respetan el límite de tamaño, utilizan props y aplican r
 * `*`: Manejo de ruta no encontrada 404 (`NotFoundPage`).
 
 ### 3. Hooks Utilizados
-* **`useState`:** Manejo de filtros reactivos de búsqueda y categoría en catálogo, estados locales de formularios y lista dinámica de pedidos.
+* **`useState`:** Manejo de filtros reactivos de búsqueda y categoría en catálogo y de estados de formularios.
 * **`useEffect`:** Título dinámico en la pestaña del navegador (`useTituloPagina`) y contador regresivo en vivo con limpieza de intervalo (`clearInterval`) al desmontar (`ContadorProximoPedido`).
 * **`useContext`:** `AuthContext` (almacena el usuario autenticado y maneja login/logout) y `ThemeContext` (alterna tema claro y oscuro mediante `data-bs-theme` de Bootstrap).
 * **`useRef`:** Foco automático en el primer campo del formulario (`FormularioPedido` y `LoginPage`) y restablecimiento del cursor tras registrar el pedido.
 
-### 4. Validaciones y Reutilización de `core-js`
+### 4. Consumo REST
+
+* `usePlatos` carga el catálogo o el detalle mediante Fetch.
+* `usePedidos(usuarioId)` expone `datos`, `cargando`, `error`, `crear` y `cancelar`, además del resumen y la actualización manual. Lee con Alova y escribe con Axios.
+* **Actualizar pedidos** fuerza una nueva consulta a la API compartida para ver las decisiones del administrador.
+* `AuthContext` consulta el usuario por correo y conserva el perfil en `localStorage`.
+
+### 5. Validaciones y Reutilización de `core-js`
 * Integración directa con `core-js/validadores.js` (`esFecha`, `esHora`, `validarPedido`) y `core-js/modelos.js` (`Plato`, `Pedido`).
 * **Regla de negocio adicional:** Bloqueo de cruce de horarios para impedir que un estudiante tenga más de un pedido activo en la misma fecha y hora.
