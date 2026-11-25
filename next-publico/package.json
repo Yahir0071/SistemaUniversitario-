@@ -1,0 +1,17 @@
+{
+  "name": "next-publico",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "sync-core": "node -e \"require('fs').cpSync('../core-js','src/core',{recursive:true})\""
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "next": "16.4.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}

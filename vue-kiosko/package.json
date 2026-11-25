@@ -1,0 +1,20 @@
+{
+  "name": "vue-kiosko",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "sync-core": "node -e \"require('fs').cpSync('../core-js','src/core',{recursive:true})\""
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.10",
+    "vite": "^8.3.6"
+  }
+}
