@@ -7,16 +7,10 @@ import { ResumenPedidoCard } from './ResumenPedidoCard.jsx';
 import { TicketConfirmado } from './TicketConfirmado.jsx';
 import { obtenerImagenPlato } from '../data/platosImagenes.js';
 
-const estadoInicial = (platos = [], platoId = '', cantidad = 1) => {
-  const primeroDisponible = platos.find((p) => new Plato(p).estaDisponible)?.id;
-  return {
-    platoId: platoId ? String(platoId) : (primeroDisponible ? String(primeroDisponible) : ''),
-    fecha: '',
-    hora: '',
-    cantidad: Number(cantidad) || 1,
-    notas: '',
-  };
-};
+const estadoInicial = (platos = [], platoId = '', cantidad = 1) => ({
+  platoId: platoId ? String(platoId) : String(platos.find((p) => new Plato(p).estaDisponible)?.id || ''),
+  fecha: '', hora: '', cantidad: Number(cantidad) || 1, notas: '',
+});
 
 export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInicialId = '', cantidadInicial = 1, onGuardar, guardando }) {
   const [form, setForm] = useState(() => estadoInicial(platos, platoInicialId, cantidadInicial));
@@ -86,7 +80,7 @@ export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInici
             <select
               id="platoId" ref={primerCampoRef}
               className={`form-select fc-input ${platoActual ? 'mt-3' : ''} ${errores.platoId ? 'is-invalid' : ''}`}
-              value={form.platoId} onChange={(e) => { actualizar('platoId', e.target.value); setCambiarPlato(false); }}
+              value={form.platoId} onChange={(e) => { actualizar('platoId', e.target.value); actualizar('hora', ''); setCambiarPlato(false); }}
             >
               <option value="">-- Selecciona un plato disponible --</option>
               {platos.map((p) => <option key={p.id} value={p.id} disabled={!new Plato(p).estaDisponible}>{p.nombre} — S/ {p.precio.toFixed(2)} ({p.estado})</option>)}
@@ -107,7 +101,7 @@ export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInici
           </div>
         </div>
 
-        <SelectorFranjas fecha={form.fecha} hora={form.hora} errores={errores} onChange={actualizar} />
+        <SelectorFranjas fecha={form.fecha} hora={form.hora} categoria={platoActual?.categoria} errores={errores} onChange={actualizar} />
 
         <div className="fc-card p-4">
           <label htmlFor="notas" className="form-label fw-semibold small mb-2">Notas adicionales (opcional)</label>

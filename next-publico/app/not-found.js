@@ -8,15 +8,20 @@ export const metadata = {
 export default function NotFound() {
   return (
     <div className="container py-5 text-center">
-      <div className="fc-card p-5 mx-auto" style={{ maxWidth: '600px' }}>
-        <h1 className="display-4 fw-bold text-warning mb-2">404</h1>
-        <h2 className="h4 fw-bold text-light mb-3">Página no encontrada</h2>
-        <p className="text-secondary mb-4">
-          La ruta que intentas visitar no existe en el portal público de FoodCampus.
+      <div className="fc-card p-5 mx-auto" style={{ maxWidth: '560px' }}>
+        <h1 className="display-4 fw-bold text-brand mb-2">404</h1>
+        <h2 className="h4 fw-bold mb-3" style={{ color: 'var(--ink)' }}>Página no encontrada</h2>
+        <p className="text-muted-fc mb-4">
+          La ruta o el plato que intentas visitar no existe en el portal público de FoodCampus.
         </p>
-        <Link href="/" className="btn-primary-fc">
-          Ir al Inicio
-        </Link>
+        <div className="d-flex justify-content-center gap-2">
+          <Link href="/" className="btn fc-btn-brand px-4 py-2">
+            Ir al Inicio
+          </Link>
+          <Link href="/platos" className="btn fc-btn-secondary px-4 py-2">
+            Ver Catálogo
+          </Link>
+        </div>
       </div>
     </div>
   );

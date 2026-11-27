@@ -20,9 +20,14 @@ export function DetallePlatoPage() {
   if (consulta.cargando || (consulta.error && !consulta.noEncontrado)) {
     return <EstadoConsulta {...consulta} mensajeCarga="Cargando plato…" />;
   }
-
   if (consulta.noEncontrado) {
-    return <PlatoNoEncontrado id={id} />;
+    return (
+      <div className="fc-card p-4 text-center">
+        <h4 className="fw-bold">Plato no encontrado</h4>
+        <p className="text-muted-fc mb-3">El plato #{id} no figura en el menú.</p>
+        <Link className="btn fc-btn-brand px-4" to="/catalogo">← Volver al catálogo</Link>
+      </div>
+    );
   }
 
   const plato = new Plato(encontrado);
@@ -31,20 +36,12 @@ export function DetallePlatoPage() {
 
   return (
     <div>
-      <div className="mb-3">
-        <Link to="/catalogo" className="text-decoration-none text-muted-fc small fw-semibold">
-          ‹ Catálogo
-        </Link>
-      </div>
+      <div className="mb-3"><Link to="/catalogo" className="text-decoration-none text-muted-fc small fw-semibold">‹ Catálogo</Link></div>
 
       <div className="row g-4 align-items-start mb-5">
         <div className="col-lg-5 col-xl-6">
           <div className="overflow-hidden" style={{ height: '420px', borderRadius: '24px', boxShadow: 'var(--card-shadow-lg)' }}>
-            <img
-              src={obtenerImagenPlato(plato.id, encontrado.imagen)}
-              alt={plato.nombre}
-              className={`w-100 h-100 object-fit-cover ${!plato.estaDisponible ? 'fc-img-agotado' : ''}`}
-            />
+            <img src={obtenerImagenPlato(plato.id, encontrado.imagen)} alt={plato.nombre} className={`w-100 h-100 object-fit-cover ${!plato.estaDisponible ? 'fc-img-agotado' : ''}`} />
           </div>
         </div>
 
@@ -54,24 +51,9 @@ export function DetallePlatoPage() {
           <p className="text-muted-fc mb-4">{descripcion}</p>
 
           <div className="row g-2 mb-3">
-            <div className="col-4">
-              <div className="fc-card p-3 h-100">
-                <div className="small text-muted-fc">Precio</div>
-                <div className="fw-bold fs-5">S/ {plato.precio.toFixed(2)}</div>
-              </div>
-            </div>
-            <div className="col-4">
-              <div className="fc-card p-3 h-100">
-                <div className="small text-muted-fc">⏱️ Preparación</div>
-                <div className="fw-bold fs-5">15 <span className="fs-6 fw-normal text-muted-fc">min</span></div>
-              </div>
-            </div>
-            <div className="col-4">
-              <div className="fc-card p-3 h-100">
-                <div className="small text-muted-fc">🏪 Recojo</div>
-                <div className="fw-bold small mt-1">Mostrador principal</div>
-              </div>
-            </div>
+            <div className="col-4"><div className="fc-card p-3 h-100"><div className="small text-muted-fc">Precio</div><div className="fw-bold fs-5">S/ {plato.precio.toFixed(2)}</div></div></div>
+            <div className="col-4"><div className="fc-card p-3 h-100"><div className="small text-muted-fc">⏱️ Preparación</div><div className="fw-bold fs-5">15 <span className="fs-6 fw-normal text-muted-fc">min</span></div></div></div>
+            <div className="col-4"><div className="fc-card p-3 h-100"><div className="small text-muted-fc">🏪 Recojo</div><div className="fw-bold small mt-1">Mostrador principal</div></div></div>
           </div>
 
           <div className="d-flex flex-wrap align-items-center gap-2 mb-4 small">
@@ -117,16 +99,6 @@ export function DetallePlatoPage() {
           <div className="col" key={p.id}><TarjetaPlato plato={p} puedePedir={estaAutenticado} /></div>
         ))}
       </div>
-    </div>
-  );
-}
-
-function PlatoNoEncontrado({ id }) {
-  return (
-    <div className="fc-card p-4 text-center">
-      <h4 className="fw-bold">Plato no encontrado</h4>
-      <p className="text-muted-fc mb-3">El plato #{id} no figura en el menú.</p>
-      <Link className="btn fc-btn-brand px-4" to="/catalogo">← Volver al catálogo</Link>
     </div>
   );
 }

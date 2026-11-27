@@ -1,17 +1,17 @@
 <template>
   <div class="grilla-disponibilidad">
-    <!-- Header de Filtros y Leyenda -->
-    <div class="fc-card p-4 mb-4">
+    <!-- Filtros y Leyenda realista de cafetería -->
+    <div class="fc-card p-3 p-md-4 mb-4">
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-        <div class="d-flex align-items-center gap-3">
-          <label for="filtro-categoria" class="small fw-semibold text-uppercase" style="color: var(--ink-muted); letter-spacing: 0.05em;">
-            Filtrar por categoría:
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <label for="filtro-categoria" class="small fw-semibold text-uppercase mb-0" style="color: var(--ink-muted); letter-spacing: 0.05em;">
+            Categoría:
           </label>
           <select
             id="filtro-categoria"
             v-model="filtroCategoria"
             class="form-select form-select-sm"
-            style="min-width: 220px; background-color: var(--surface-sunken); color: var(--ink); border-color: var(--line); border-radius: 9999px; padding: 0.45rem 1.2rem;"
+            style="min-width: 210px; background-color: var(--surface-sunken); color: var(--ink); border-color: var(--line); border-radius: 9999px; padding: 0.45rem 1.2rem;"
           >
             <option value="">Todas las categorías ({{ platos.length }})</option>
             <option v-for="cat in categoriasDisponibles" :key="cat" :value="cat">
@@ -20,30 +20,30 @@
           </select>
         </div>
 
-        <!-- Leyenda con diseño Figma -->
-        <div class="d-flex align-items-center gap-3 small">
-          <span class="fc-pill-badge d-flex align-items-center gap-2" style="background-color: var(--moss-soft); color: var(--moss); border-color: rgba(104,173,139,0.3);">
-            <span class="badge-dot" style="background-color: var(--moss);"></span> Libre
+        <div class="d-flex flex-wrap align-items-center gap-2 small">
+          <span class="fc-pill-badge d-flex align-items-center gap-2" style="background-color: var(--moss-soft); color: var(--moss);">
+            <span class="badge-dot" style="background-color: var(--moss);"></span> Disponible
           </span>
-          <span class="fc-pill-badge d-flex align-items-center gap-2" style="background-color: var(--ochre-soft); color: var(--ochre); border-color: rgba(240,160,36,0.35);">
-            <span class="badge-dot" style="background-color: var(--ochre);"></span> Pendiente
+          <span class="fc-pill-badge d-flex align-items-center gap-2" style="background-color: var(--ochre-soft); color: var(--ochre);">
+            <span class="badge-dot" style="background-color: var(--ochre);"></span> Con pedidos en cocina
           </span>
-          <span class="fc-pill-badge d-flex align-items-center gap-2" style="background-color: var(--ember-soft); color: var(--ember); border-color: rgba(255,96,43,0.35);">
-            <span class="badge-dot" style="background-color: var(--ember);"></span> Ocupada
+          <span class="fc-pill-badge d-flex align-items-center gap-2" style="background-color: var(--ember-soft); color: var(--ember);">
+            <span class="badge-dot" style="background-color: var(--ember);"></span> Agotado / Tope lleno
           </span>
         </div>
       </div>
     </div>
 
-    <!-- Contenedor de la Tabla de Disponibilidad -->
+    <!-- Grilla por Turnos Reales de Cafetería -->
     <div class="kiosko-grid-wrapper mb-4">
       <div class="kiosko-scroll">
         <table class="kiosko-table">
           <thead>
             <tr>
               <th class="col-plato-header">Plato del Menú</th>
-              <th v-for="hora in franjasHorarias" :key="hora">
-                {{ hora }}
+              <th v-for="turno in turnosServicio" :key="turno.id" style="min-width: 190px;">
+                <div>{{ turno.icono }} {{ turno.nombre }}</div>
+                <div style="font-size: 0.68rem; font-weight: 500; opacity: 0.8;">{{ turno.rango }}</div>
               </th>
             </tr>
           </thead>
@@ -55,10 +55,10 @@
                     :src="obtenerImagen(fila.plato.id, fila.plato.imagen)"
                     alt=""
                     class="rounded-3 object-fit-cover flex-shrink-0"
-                    style="width: 44px; height: 44px; border: 1px solid var(--line);"
+                    style="width: 46px; height: 46px; border: 1px solid var(--line);"
                   />
                   <div>
-                    <div class="fw-semibold small text-truncate" style="max-width: 170px;" :title="fila.plato.nombre">
+                    <div class="fw-semibold small text-truncate" style="max-width: 190px;" :title="fila.plato.nombre">
                       {{ fila.plato.nombre }}
                     </div>
                     <div class="d-flex align-items-center gap-2" style="font-size: 0.75rem;">
@@ -69,11 +69,10 @@
                 </div>
               </td>
 
-              <!-- Componente CeldaHorario -->
-              <td v-for="celda in fila.celdas" :key="celda.hora">
+              <td v-for="turno in turnosServicio" :key="turno.id">
                 <CeldaHorario
                   :plato="fila.plato"
-                  :hora="celda.hora"
+                  :turno="turno"
                   :pedidos="pedidos"
                   @ver-detalle="mostrarDetalle"
                 />
@@ -81,7 +80,7 @@
             </tr>
 
             <tr v-if="grillaBidimensional.length === 0">
-              <td :colspan="franjasHorarias.length + 1" class="text-center py-5" style="color: var(--ink-muted);">
+              <td :colspan="turnosServicio.length + 1" class="text-center py-5" style="color: var(--ink-muted);">
                 No hay platos en la categoría seleccionada.
               </td>
             </tr>
@@ -90,7 +89,7 @@
       </div>
     </div>
 
-    <!-- Modal de detalle de turno (v-if) -->
+    <!-- Modal de detalle del turno (v-if) -->
     <div v-if="celdaSeleccionada" class="modal-backdrop-fc" @click.self="cerrarDetalle">
       <div class="fc-card p-4 mx-auto" style="max-width: 520px; width: 100%;">
         <div class="d-flex justify-content-between align-items-start mb-3 pb-3 border-bottom" style="border-color: var(--line) !important;">
@@ -102,60 +101,58 @@
               style="width: 54px; height: 54px; border: 1px solid var(--line);"
             />
             <div>
-              <span class="fc-pill-badge mb-1 d-inline-block">{{ celdaSeleccionada.plato.categoria }}</span>
-              <h4 class="h5 fw-bold mb-0" style="color: var(--ink);">{{ celdaSeleccionada.plato.nombre }}</h4>
+              <span class="small text-muted-fc text-uppercase fw-bold" style="font-size: 0.7rem;">{{ celdaSeleccionada.plato.categoria }}</span>
+              <h3 class="h5 fw-bold mb-0">{{ celdaSeleccionada.plato.nombre }}</h3>
             </div>
           </div>
-          <button type="button" class="btn btn-sm btn-link text-decoration-none" style="color: var(--ink-muted);" @click="cerrarDetalle">✕</button>
+          <button type="button" class="btn-close" aria-label="Cerrar" @click="cerrarDetalle"></button>
         </div>
 
-        <div class="p-3 rounded-4 mb-3" style="background-color: var(--surface-sunken); border: 1px solid var(--line);">
+        <div class="p-3 rounded-4 mb-3" style="background: var(--surface-sunken); border: 1px solid var(--line);">
           <div class="d-flex justify-content-between mb-2 small">
-            <span style="color: var(--ink-muted);">Franja horaria:</span>
-            <strong style="color: var(--ink);">{{ celdaSeleccionada.hora }} hrs</strong>
+            <span class="text-muted-fc">Turno consultado:</span>
+            <strong>{{ celdaSeleccionada.turno.icono }} {{ celdaSeleccionada.turno.nombre }} ({{ celdaSeleccionada.turno.rango }})</strong>
           </div>
           <div class="d-flex justify-content-between mb-2 small">
-            <span style="color: var(--ink-muted);">Precio unitario:</span>
-            <strong style="color: var(--brand);">S/ {{ celdaSeleccionada.plato.precio.toFixed(2) }}</strong>
+            <span class="text-muted-fc">Precio unitario:</span>
+            <strong class="text-brand">S/ {{ celdaSeleccionada.plato.precio.toFixed(2) }}</strong>
           </div>
           <div class="d-flex justify-content-between small">
-            <span style="color: var(--ink-muted);">Disponibilidad:</span>
-            <span
-              class="badge text-uppercase"
-              :class="{
-                'bg-success': celdaSeleccionada.estado === 'libre',
-                'bg-warning text-dark': celdaSeleccionada.estado === 'pendiente',
-                'bg-danger': celdaSeleccionada.estado === 'ocupada',
-              }"
-            >
-              ● {{ celdaSeleccionada.estado }}
-            </span>
+            <span class="text-muted-fc">Estado en cocina:</span>
+            <strong class="text-uppercase">{{ textoEstadoModal }}</strong>
+          </div>
+        </div>
+
+        <div v-if="celdaSeleccionada.plato.ingredientes?.length" class="mb-3">
+          <div class="small fw-bold text-uppercase text-muted-fc mb-2" style="font-size: 0.72rem;">Ingredientes</div>
+          <div class="d-flex flex-wrap gap-1">
+            <span v-for="ing in celdaSeleccionada.plato.ingredientes" :key="ing" class="fc-pill-badge">{{ ing }}</span>
           </div>
         </div>
 
         <div v-if="celdaSeleccionada.pedidos.length > 0" class="mb-3">
-          <div class="small fw-bold text-uppercase mb-2" style="color: var(--ink-muted); font-size: 0.72rem; letter-spacing: 0.05em;">
-            Órdenes en este horario:
+          <div class="small fw-bold text-uppercase text-muted-fc mb-2" style="font-size: 0.72rem;">
+            Pedidos en este turno ({{ celdaSeleccionada.porciones }} porciones):
           </div>
-          <div class="d-flex flex-column gap-2">
+          <div class="d-flex flex-column gap-2" style="max-height: 170px; overflow-y: auto;">
             <div
               v-for="p in celdaSeleccionada.pedidos"
               :key="p.id"
-              class="p-2 rounded-3 d-flex justify-content-between align-items-center"
+              class="p-2 px-3 rounded-3 d-flex justify-content-between align-items-center"
               style="background-color: var(--surface-raised); border: 1px solid var(--line);"
             >
               <div>
-                <span class="fw-bold me-2" style="color: var(--brand); font-family: monospace;">{{ p.codigo }}</span>
-                <span class="small" style="color: var(--ink-muted);">{{ p.cantidad }} unid.</span>
+                <span class="fw-bold me-2 font-monospace text-brand">{{ p.codigo }}</span>
+                <span class="small text-muted-fc">{{ p.cantidad }} porc. · {{ p.fecha }} {{ p.hora || '' }}</span>
               </div>
-              <span class="badge" :class="p.estado === 'aprobada' ? 'bg-danger' : 'bg-warning text-dark'">
-                {{ p.estado }}
+              <span class="badge" :class="p.estado === 'aprobada' ? 'text-bg-success' : 'text-bg-warning'">
+                {{ p.estado === 'aprobada' ? 'En preparación' : 'Pendiente' }}
               </span>
             </div>
           </div>
         </div>
-        <div v-else class="text-center py-3 mb-3 small" style="color: var(--moss);">
-          ✓ Sin reservas conflictivas. Horario óptimo para retiro de pedidos.
+        <div v-else class="text-center py-2 mb-3 small text-muted-fc">
+          {{ celdaSeleccionada.estado === 'fuera' ? 'Este plato no se sirve en este turno.' : 'Sin pedidos en cola para este turno.' }}
         </div>
 
         <button type="button" class="fc-btn-primary w-100" @click="cerrarDetalle">
@@ -184,27 +181,19 @@ const IMAGENES = {
 
 export default {
   name: 'GrillaDisponibilidad',
-  components: {
-    CeldaHorario,
-  },
+  components: { CeldaHorario },
   props: {
-    platos: {
-      type: Array,
-      required: true,
-    },
-    pedidos: {
-      type: Array,
-      required: true,
-    },
+    platos: { type: Array, required: true },
+    pedidos: { type: Array, required: true },
   },
   data() {
     return {
       filtroCategoria: '',
       celdaSeleccionada: null,
-      franjasHorarias: [
-        '07:00', '08:00', '09:00', '10:00', '11:00', '12:00',
-        '13:00', '14:00', '15:00', '16:00', '17:00', '18:00',
-        '19:00', '20:00', '21:00', '22:00',
+      turnosServicio: [
+        { id: 'desayuno', nombre: 'Desayuno', icono: '☕', rango: '07:30 – 11:30', horaInicio: 7, horaFin: 11 },
+        { id: 'almuerzo', nombre: 'Almuerzo', icono: '🍽️', rango: '12:00 – 15:30', horaInicio: 12, horaFin: 15 },
+        { id: 'tarde', nombre: 'Tarde / Café', icono: '🌆', rango: '16:00 – 20:00', horaInicio: 16, horaFin: 20 },
       ],
     };
   },
@@ -217,17 +206,20 @@ export default {
       return this.platos.filter((p) => p.categoria === this.filtroCategoria);
     },
     grillaBidimensional() {
-      return this.platosFiltrados.map((p) => {
-        const platoModelo = new Plato(p);
-        const celdas = this.franjasHorarias.map((hora) => ({
-          hora,
-          platoId: platoModelo.id,
-        }));
-        return {
-          plato: platoModelo,
-          celdas,
-        };
-      });
+      return this.platosFiltrados.map((p) => ({
+        plato: Object.assign(new Plato(p), { imagen: p.imagen || '' }),
+      }));
+    },
+    textoEstadoModal() {
+      if (!this.celdaSeleccionada) return '';
+      const map = {
+        fuera: 'Fuera de turno',
+        disponible: 'Disponible para ordenar',
+        demanda: `${this.celdaSeleccionada.porciones} porciones en preparación`,
+        agotado: 'Plato agotado',
+        saturado: 'Capacidad de cocina alcanzada',
+      };
+      return map[this.celdaSeleccionada.estado] || this.celdaSeleccionada.estado;
     },
   },
   methods: {

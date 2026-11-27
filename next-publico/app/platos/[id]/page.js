@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
+const API_URL = (process.env.API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
 const IMAGENES = {
   1: 'https://commons.wikimedia.org/wiki/Special:FilePath/Lomo_saltado_peruano.jpg?width=800',
@@ -14,6 +15,15 @@ const IMAGENES = {
   8: 'https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&w=700&q=80',
 };
 
+const HORARIO_CATEGORIA = {
+  Desayunos: '07:30 – 11:30 y 16:00 – 20:00',
+  Almuerzos: '12:00 – 15:30',
+  Saludable: '12:00 – 20:00',
+  Snacks: 'Todo el día (07:30 – 20:00)',
+  Bebidas: 'Todo el día (07:30 – 20:00)',
+  Postres: 'Todo el día (07:30 – 20:00)',
+};
+
 function obtenerImagen(id, urlOpcional) {
   if (urlOpcional && urlOpcional.trim()) return urlOpcional.trim();
   return IMAGENES[Number(id)] || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=700&q=80';
@@ -22,12 +32,12 @@ function obtenerImagen(id, urlOpcional) {
 export async function generateMetadata({ params }) {
   const { id } = await params;
   try {
-    const res = await fetch(`http://localhost:3000/platos/${id}`, { cache: 'no-store' });
+    const res = await fetch(`${API_URL}/platos/${encodeURIComponent(id)}`, { cache: 'no-store' });
     if (!res.ok) return { title: 'Plato no encontrado - FoodCampus' };
     const plato = await res.json();
     return {
       title: `${plato.nombre} - Detalle Público SSR | FoodCampus`,
-      description: `Consulta los ingredientes y pedidos aprobados de ${plato.nombre} en FoodCampus UTP.`,
+      description: `Consulta ingredientes, horario de servicio y disponibilidad de ${plato.nombre} en FoodCampus UTP.`,
     };
   } catch {
     return { title: 'Detalle de Plato - FoodCampus' };
@@ -37,17 +47,16 @@ export async function generateMetadata({ params }) {
 async function obtenerDetalle(id) {
   try {
     const [resPlato, resPedidos] = await Promise.all([
-      fetch(`http://localhost:3000/platos/${id}`, { cache: 'no-store' }),
-      fetch(`http://localhost:3000/pedidos?platoId=${id}`, { cache: 'no-store' }),
+      fetch(`${API_URL}/platos/${encodeURIComponent(id)}`, { cache: 'no-store' }),
+      fetch(`${API_URL}/pedidos?platoId=${encodeURIComponent(id)}`, { cache: 'no-store' }),
     ]);
-
     if (!resPlato.ok) return null;
-
     const plato = await resPlato.json();
     const pedidos = resPedidos.ok ? await resPedidos.json() : [];
-    const pedidosAprobados = pedidos.filter((p) => p.estado === 'aprobada');
-
-    return { plato, pedidosAprobados };
+    const totalPorciones = pedidos
+      .filter((p) => p.estado === 'aprobada')
+      .reduce((acc, p) => acc + (Number(p.cantidad) || 1), 0);
+    return { plato, totalPorciones, ordenesActivas: pedidos.filter((p) => p.estado !== 'rechazada').length };
   } catch (error) {
     console.error('Error cargando detalle SSR:', error);
     return null;
@@ -62,103 +71,82 @@ export default async function DetallePlatoSSR({ params }) {
     notFound();
   }
 
-  const { plato, pedidosAprobados } = data;
+  const { plato, totalPorciones, ordenesActivas } = data;
   const imagenUrl = obtenerImagen(plato.id, plato.imagen);
+  const horarioServicio = HORARIO_CATEGORIA[plato.categoria] || '07:30 – 20:00';
 
   return (
-    <div className="container py-5">
-      <Link href="/platos" className="fc-btn-secondary btn-sm mb-4">
+    <div className="container py-4 py-md-5">
+      <Link href="/platos" className="btn btn-sm fc-btn-secondary px-3 py-2 mb-4">
         ← Volver al catálogo público
       </Link>
 
-      <div className="row g-4">
+      <div className="row g-4 align-items-start">
         <div className="col-lg-6">
-          <div className="fc-card overflow-hidden h-100">
-            <div style={{ height: '280px', overflow: 'hidden' }}>
+          <div className="fc-card overflow-hidden">
+            <div style={{ height: '360px', overflow: 'hidden' }}>
               <img src={imagenUrl} alt={plato.nombre} className="w-100 h-100 object-fit-cover" />
-            </div>
-
-            <div className="p-4">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <span className="fc-pill-badge">{plato.categoria}</span>
-                <span
-                  className="badge px-3 py-1 rounded-pill"
-                  style={{
-                    backgroundColor: plato.estado === 'disponible' ? 'var(--moss)' : 'var(--ember)',
-                    fontSize: '0.75rem',
-                  }}
-                >
-                  ● {plato.estado}
-                </span>
-              </div>
-
-              <h1 className="h2 fw-bold mb-2" style={{ color: 'var(--ink)' }}>{plato.nombre}</h1>
-              <div className="fs-3 fw-bold mb-4" style={{ color: 'var(--brand)' }}>
-                S/ {Number(plato.precio).toFixed(2)}
-              </div>
-
-              <h5 className="small text-uppercase fw-bold mb-2" style={{ color: 'var(--ink-muted)', letterSpacing: '0.05em' }}>
-                Ingredientes y Guarniciones:
-              </h5>
-              <div className="d-flex flex-wrap gap-2 mb-4">
-                {plato.ingredientes?.map((ing) => (
-                  <span key={ing} className="fc-pill-badge" style={{ backgroundColor: 'var(--surface-sunken)', color: 'var(--ink)' }}>
-                    ✓ {ing}
-                  </span>
-                ))}
-              </div>
-
-              <div className="p-3 rounded-4" style={{ background: 'var(--surface-sunken)', border: '1px solid var(--line)' }}>
-                <span className="small d-block" style={{ color: 'var(--ink-muted)' }}>Identificador en base de datos:</span>
-                <code style={{ color: 'var(--brand)' }}>platoId: #{plato.id}</code>
-              </div>
             </div>
           </div>
         </div>
 
         <div className="col-lg-6">
-          <div className="fc-card p-4 h-100">
-            <div className="d-flex align-items-center justify-content-between mb-2">
-              <h3 className="h5 fw-bold mb-0" style={{ color: 'var(--ink)' }}>Órdenes Aprobadas de la Semana</h3>
-              <span className="fc-pill-badge">{pedidosAprobados.length} pedidos</span>
+          <div className="fc-card p-4">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <span className="fc-pill-badge">🍽️ {plato.categoria}</span>
+              <span className={`fc-badge ${plato.estado === 'disponible' ? 'fc-badge-disponible' : 'fc-badge-agotado'}`}>
+                <span className="fc-badge-dot" />
+                {plato.estado === 'disponible' ? 'Disponible' : 'Agotado'}
+              </span>
             </div>
-            
-            <p className="small mb-4" style={{ color: 'var(--ink-muted)' }}>
-              Relación de pedidos confirmados por el personal de cafetería (Renderizado SSR).
-            </p>
 
-            {pedidosAprobados.length > 0 ? (
-              <div className="d-flex flex-column gap-2">
-                {pedidosAprobados.map((ped) => (
-                  <div
-                    key={ped.id}
-                    className="p-3 rounded-4 d-flex justify-content-between align-items-center"
-                    style={{ background: 'var(--surface-sunken)', border: '1px solid var(--line)' }}
-                  >
-                    <div>
-                      <Link href={`/pedidos/${ped.codigo}`} className="fw-bold text-decoration-none fs-6" style={{ color: 'var(--brand)', fontFamily: 'monospace' }}>
-                        {ped.codigo}
-                      </Link>
-                      <div className="small" style={{ color: 'var(--ink-muted)' }}>
-                        Fecha: <strong style={{ color: 'var(--ink)' }}>{ped.fecha}</strong> · {ped.cantidad} unid.
-                      </div>
-                    </div>
-                    <div className="text-end">
-                      <span className="fw-bold d-block" style={{ color: 'var(--moss)' }}>
-                        S/ {Number(ped.precioTotal).toFixed(2)}
-                      </span>
-                      <span className="badge" style={{ backgroundColor: 'var(--moss-soft)', color: 'var(--moss)' }}>
-                        aprobada
-                      </span>
-                    </div>
-                  </div>
-                ))}
+            <h1 className="h2 fw-bold mb-2" style={{ color: 'var(--ink)' }}>{plato.nombre}</h1>
+            <div className="fs-3 fw-bold mb-4 text-brand">S/ {Number(plato.precio).toFixed(2)}</div>
+
+            <div className="row g-2 mb-4">
+              <div className="col-sm-6">
+                <div className="p-3 rounded-4 h-100" style={{ background: 'var(--surface-sunken)', border: '1px solid var(--line)' }}>
+                  <div className="small text-muted-fc">🕒 Horario de servicio</div>
+                  <div className="fw-semibold small mt-1">{horarioServicio}</div>
+                </div>
               </div>
-            ) : (
-              <div className="text-center py-5 rounded-4" style={{ background: 'var(--surface-sunken)', border: '1px solid var(--line)', color: 'var(--ink-muted)' }}>
-                No hay órdenes aprobadas para este plato en los registros actuales.
+              <div className="col-sm-6">
+                <div className="p-3 rounded-4 h-100" style={{ background: 'var(--surface-sunken)', border: '1px solid var(--line)' }}>
+                  <div className="small text-muted-fc">📍 Recojo y preparación</div>
+                  <div className="fw-semibold small mt-1">Módulo Central · ~15 min</div>
+                </div>
               </div>
-            )}
+            </div>
+
+            <h2 className="small text-uppercase fw-bold text-muted-fc mb-2" style={{ letterSpacing: '0.06em' }}>
+              Ingredientes principales
+            </h2>
+            <div className="d-flex flex-wrap gap-2 mb-4">
+              {plato.ingredientes?.map((ing) => (
+                <span key={ing} className="fc-pill-badge" style={{ color: 'var(--ink)' }}>
+                  ✓ {ing}
+                </span>
+              ))}
+            </div>
+
+            <div className="p-3 rounded-4 mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2" style={{ background: 'var(--surface-sunken)', border: '1px solid var(--line)' }}>
+              <div>
+                <div className="small text-muted-fc">Popularidad en cafetería</div>
+                <div className="fw-semibold small">
+                  {totalPorciones > 0 ? `${totalPorciones} porciones preparadas · ${ordenesActivas} órdenes activas` : 'Recién agregado a la carta del día'}
+                </div>
+              </div>
+              <span className="fc-pill-badge">SSR en vivo</span>
+            </div>
+
+            <div className="d-flex flex-wrap gap-2">
+              <Link href="/pedidos/buscar" className="btn fc-btn-brand flex-fill py-2">
+                🔍 Rastrear mi pedido
+              </Link>
+              <Link href={`/platos?categoria=${encodeURIComponent(plato.categoria)}`} className="btn fc-btn-secondary flex-fill py-2">
+                Más en {plato.categoria}
+              </Link>
+            </div>
           </div>
         </div>
       </div>

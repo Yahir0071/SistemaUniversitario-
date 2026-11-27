@@ -1,91 +1,90 @@
 <template>
   <div
-    class="celda-slot"
+    class="celda-slot px-2"
     :class="claseEstado"
     @click="seleccionar"
-    :title="`${plato.nombre} a las ${hora}: ${etiquetaEstado}`"
+    :title="`${plato.nombre} (${turno.nombre}): ${etiquetaEstado}`"
   >
     <span class="d-flex align-items-center gap-1">
-      <span class="dot-indicator" :style="{ backgroundColor: colorPunto }"></span>
+      <span v-if="estadoCalculado !== 'fuera'" class="dot-indicator" :style="{ backgroundColor: colorPunto }"></span>
       <span>{{ etiquetaEstado }}</span>
     </span>
   </div>
 </template>
 
 <script>
+const TURNOS_POR_CATEGORIA = {
+  Desayunos: ['desayuno', 'tarde'],
+  Almuerzos: ['almuerzo'],
+  Saludable: ['almuerzo', 'tarde'],
+  Snacks: ['desayuno', 'almuerzo', 'tarde'],
+  Bebidas: ['desayuno', 'almuerzo', 'tarde'],
+  Postres: ['desayuno', 'almuerzo', 'tarde'],
+};
+
+const TOPE_PORCIONES_TURNO = 10;
+
 export default {
   name: 'CeldaHorario',
   props: {
-    plato: {
-      type: Object,
-      required: true,
-    },
-    hora: {
-      type: String,
-      required: true,
-    },
-    pedidos: {
-      type: Array,
-      default: () => [],
-    },
+    plato: { type: Object, required: true },
+    turno: { type: Object, required: true },
+    pedidos: { type: Array, default: () => [] },
   },
   emits: ['ver-detalle'],
   computed: {
+    seSirveEnTurno() {
+      const permitidos = TURNOS_POR_CATEGORIA[this.plato.categoria] || ['desayuno', 'almuerzo', 'tarde'];
+      return permitidos.includes(this.turno.id);
+    },
     pedidosCelda() {
+      if (!this.seSirveEnTurno) return [];
       return this.pedidos.filter((p) => {
         if (Number(p.platoId) !== Number(this.plato.id)) return false;
-        const horaPedido = p.hora || (p.creadoEn && p.creadoEn.length >= 16 ? p.creadoEn.slice(11, 16) : '');
-        return horaPedido.startsWith(this.hora.slice(0, 2));
+        if (p.estado === 'rechazada') return false;
+        const hora = p.hora || (p.creadoEn && p.creadoEn.length >= 16 ? p.creadoEn.slice(11, 16) : '12:00');
+        const h = Number(hora.slice(0, 2));
+        return h >= this.turno.horaInicio && h <= this.turno.horaFin;
       });
     },
+    porcionesEnTurno() {
+      return this.pedidosCelda.reduce((sum, p) => sum + (Number(p.cantidad) || 1), 0);
+    },
     estadoCalculado() {
-      if (this.plato.estado === 'agotado') {
-        return 'ocupada';
-      }
-      const tieneAprobado = this.pedidosCelda.some((p) => p.estado === 'aprobada');
-      if (tieneAprobado) {
-        return 'ocupada';
-      }
-      const tienePendiente = this.pedidosCelda.some((p) => p.estado === 'pendiente');
-      if (tienePendiente) {
-        return 'pendiente';
-      }
-      return 'libre';
+      if (!this.seSirveEnTurno) return 'fuera';
+      if (this.plato.estado === 'agotado') return 'agotado';
+      if (this.porcionesEnTurno >= TOPE_PORCIONES_TURNO) return 'saturado';
+      if (this.pedidosCelda.length > 0) return 'demanda';
+      return 'disponible';
     },
     claseEstado() {
       return {
-        'slot-libre': this.estadoCalculado === 'libre',
-        'slot-pendiente': this.estadoCalculado === 'pendiente',
-        'slot-ocupada': this.estadoCalculado === 'ocupada',
+        'slot-fuera': this.estadoCalculado === 'fuera',
+        'slot-libre': this.estadoCalculado === 'disponible',
+        'slot-pendiente': this.estadoCalculado === 'demanda',
+        'slot-ocupada': this.estadoCalculado === 'agotado' || this.estadoCalculado === 'saturado',
       };
     },
     etiquetaEstado() {
-      switch (this.estadoCalculado) {
-        case 'ocupada':
-          return 'Ocupada';
-        case 'pendiente':
-          return 'Pendiente';
-        default:
-          return 'Libre';
-      }
+      if (this.estadoCalculado === 'fuera') return '— Fuera de turno';
+      if (this.estadoCalculado === 'agotado') return 'Agotado';
+      if (this.estadoCalculado === 'saturado') return `Tope (${this.porcionesEnTurno} porc.)`;
+      if (this.estadoCalculado === 'demanda') return `${this.porcionesEnTurno} porc. en cocina`;
+      return 'Disponible';
     },
     colorPunto() {
-      switch (this.estadoCalculado) {
-        case 'ocupada':
-          return 'var(--ember)';
-        case 'pendiente':
-          return 'var(--ochre)';
-        default:
-          return 'var(--moss)';
-      }
+      if (this.estadoCalculado === 'agotado' || this.estadoCalculado === 'saturado') return 'var(--ember)';
+      if (this.estadoCalculado === 'demanda') return 'var(--ochre)';
+      return 'var(--moss)';
     },
   },
   methods: {
     seleccionar() {
       this.$emit('ver-detalle', {
         plato: this.plato,
-        hora: this.hora,
+        turno: this.turno,
         estado: this.estadoCalculado,
+        porciones: this.porcionesEnTurno,
         pedidos: this.pedidosCelda,
       });
     },
