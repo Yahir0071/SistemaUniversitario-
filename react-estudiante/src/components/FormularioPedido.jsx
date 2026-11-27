@@ -80,7 +80,7 @@ export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInici
             <select
               id="platoId" ref={primerCampoRef}
               className={`form-select fc-input ${platoActual ? 'mt-3' : ''} ${errores.platoId ? 'is-invalid' : ''}`}
-              value={form.platoId} onChange={(e) => { actualizar('platoId', e.target.value); setCambiarPlato(false); }}
+              value={form.platoId} onChange={(e) => { actualizar('platoId', e.target.value); actualizar('hora', ''); setCambiarPlato(false); }}
             >
               <option value="">-- Selecciona un plato disponible --</option>
               {platos.map((p) => <option key={p.id} value={p.id} disabled={!new Plato(p).estaDisponible}>{p.nombre} — S/ {p.precio.toFixed(2)} ({p.estado})</option>)}
@@ -101,7 +101,7 @@ export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInici
           </div>
         </div>
 
-        <SelectorFranjas fecha={form.fecha} hora={form.hora} errores={errores} onChange={actualizar} />
+        <SelectorFranjas fecha={form.fecha} hora={form.hora} categoria={platoActual?.categoria} errores={errores} onChange={actualizar} />
 
         <div className="fc-card p-4">
           <label htmlFor="notas" className="form-label fw-semibold small mb-2">Notas adicionales (opcional)</label>
