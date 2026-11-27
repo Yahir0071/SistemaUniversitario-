@@ -48,7 +48,7 @@ export function validarFormularioPedido(valores, platos, pedidosUsuario, usuario
       return modelo.estaActivo && p.fecha === valores.fecha && obtenerHoraPedido(p) === valores.hora;
     });
     if (cruce) {
-      errores.hora = `Horario ocupado: ya tienes el pedido ${cruce.codigo} el ${valores.fecha} a las ${valores.hora}.`;
+      errores.hora = `Ya tienes una orden programada (${cruce.codigo}) el ${valores.fecha} a las ${valores.hora}.`;
     }
   }
 

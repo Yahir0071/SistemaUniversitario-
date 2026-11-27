@@ -43,7 +43,7 @@ export function ContadorProximoPedido({ pedidos, platos = [] }) {
   return (
     <div className="fc-card p-3 mb-4 d-flex flex-row flex-wrap justify-content-between align-items-center gap-3">
       <div className="d-flex align-items-center gap-3">
-        <img src={obtenerImagenPlato(proximo.platoId)} alt="" className="fc-thumb-sm" />
+        <img src={obtenerImagenPlato(proximo.platoId, plato?.imagen)} alt="" className="fc-thumb-sm" />
         <div>
           <span
             className="badge rounded-pill px-2 py-1 mb-1 fw-semibold"

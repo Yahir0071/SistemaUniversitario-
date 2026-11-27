@@ -1,5 +1,6 @@
 import jsonServer from 'json-server';
 import { crearGeneradorCodigos } from '../core-js/estadisticas.js';
+import { validarPedido } from '../core-js/validadores.js';
 
 const servidor = jsonServer.create();
 const router = jsonServer.router(process.env.FOODCAMPUS_DB ?? 'db.json');
@@ -11,7 +12,16 @@ const siguienteCodigo = crearGeneradorCodigos('PED', ultimoCodigo);
 
 servidor.use(jsonServer.defaults());
 servidor.use(jsonServer.bodyParser);
-servidor.post('/pedidos', (req, _res, next) => {
+servidor.post('/pedidos', (req, res, next) => {
+  const plato = router.db.get('platos').find((p) => Number(p.id) === Number(req.body.platoId)).value();
+  if (!plato) return res.status(404).json({ error: 'El plato solicitado no existe.' });
+  if (plato.estado !== 'disponible') return res.status(409).json({ error: 'El plato figura como agotado.' });
+  const errores = validarPedido({
+    ...req.body,
+    cantidad: Number(req.body.cantidad),
+    precioUnitario: Number(req.body.precioUnitario),
+  });
+  if (errores.length > 0) return res.status(400).json({ error: errores[0] });
   req.body.codigo = siguienteCodigo();
   next();
 });

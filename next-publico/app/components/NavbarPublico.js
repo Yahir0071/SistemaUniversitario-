@@ -1,17 +1,37 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
+const TEMA_KEY = 'foodcampus_tema';
 
 export default function NavbarPublico() {
   const pathname = usePathname();
   const [esOscuro, setEsOscuro] = useState(false);
 
+  useEffect(() => {
+    try {
+      const guardado = localStorage.getItem(TEMA_KEY) === 'dark';
+      setEsOscuro(guardado);
+      document.documentElement.setAttribute('data-bs-theme', guardado ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', guardado);
+    } catch {
+      // Ignorar si localStorage no está disponible
+    }
+  }, []);
+
   const alternarTema = () => {
     const nuevo = !esOscuro;
     setEsOscuro(nuevo);
-    document.documentElement.setAttribute('data-bs-theme', nuevo ? 'dark' : 'light');
+    const valor = nuevo ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-bs-theme', valor);
+    document.documentElement.classList.toggle('dark', nuevo);
+    try {
+      localStorage.setItem(TEMA_KEY, valor);
+    } catch {
+      // Ignorar error de almacenamiento
+    }
   };
 
   return (
@@ -39,12 +59,13 @@ export default function NavbarPublico() {
         <div className="d-flex align-items-center gap-2">
           <button
             type="button"
-            className="btn btn-sm rounded-pill px-3"
-            style={{ background: 'var(--surface-sunken)', border: '1px solid var(--line)', color: 'var(--ink)' }}
+            className="fc-theme-switch"
             onClick={alternarTema}
-            title="Alternar tema claro/oscuro"
+            title={esOscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            aria-label="Cambiar tema"
           >
-            {esOscuro ? '☀️' : '🌙'}
+            <span className={`fc-theme-btn ${!esOscuro ? 'active' : ''}`}>☀️</span>
+            <span className={`fc-theme-btn ${esOscuro ? 'active' : ''}`}>🌙</span>
           </button>
           <Link href="/pedidos/buscar" className="btn btn-sm fc-btn-brand px-3 py-2">
             🔍 Consultar Ticket

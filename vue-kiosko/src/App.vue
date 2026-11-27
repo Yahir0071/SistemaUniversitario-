@@ -1,6 +1,6 @@
 <template>
   <div class="kiosko-app d-flex flex-column min-vh-100">
-    <!-- Navbar translúcida estilo React/Figma -->
+    <!-- Navbar translúcida unificada con React/Angular -->
     <nav class="fc-navbar py-2 px-3">
       <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
         <div class="d-flex align-items-center gap-2 text-decoration-none">
@@ -14,19 +14,20 @@
         </div>
 
         <div class="d-flex align-items-center gap-2">
-          <span class="fc-pill-badge d-none d-sm-inline-flex align-items-center gap-2">
+          <span class="fc-pill-badge d-none d-md-inline-flex align-items-center gap-2">
             <span class="pulse-dot"></span>
             <span>Actualizado: <strong>{{ horaUltimaActualizacion }}</strong> (30s)</span>
           </span>
 
           <button
             type="button"
-            class="btn btn-sm rounded-pill px-3"
-            style="background: var(--surface-sunken); border: 1px solid var(--line); color: var(--ink);"
+            class="fc-theme-switch"
             @click="alternarTema"
-            title="Cambiar tema claro/oscuro"
+            :title="esOscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+            aria-label="Cambiar tema"
           >
-            {{ esOscuro ? '☀️' : '🌙' }}
+            <span class="fc-theme-btn" :class="{ active: !esOscuro }">☀️</span>
+            <span class="fc-theme-btn" :class="{ active: esOscuro }">🌙</span>
           </button>
 
           <button
@@ -43,36 +44,51 @@
 
     <!-- Contenido Principal -->
     <main class="container py-4 flex-grow-1">
-      <div class="mb-4">
-        <span class="text-uppercase fw-bold small text-brand" style="letter-spacing: 0.06em;">
-          Pantalla de Disponibilidad en Tiempo Real
-        </span>
-        <h1 class="h2 fw-bold mb-1" style="letter-spacing: -0.02em;">
-          Horarios de Atención en Cafetería
-        </h1>
-        <p class="text-muted-fc small mb-0">
-          Consulta al instante la disponibilidad de cada plato por franja horaria (07:00 – 22:00). Haz clic en cualquier celda para ver las órdenes.
-        </p>
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+        <div>
+          <span class="text-uppercase fw-bold small text-brand" style="letter-spacing: 0.06em;">
+            Pantalla Pública de Cafetería
+          </span>
+          <h1 class="h2 fw-bold mb-1" style="letter-spacing: -0.02em;">
+            Turnos de Servicio y Órdenes en Vivo
+          </h1>
+          <p class="text-muted-fc small mb-0">
+            Consulta los pedidos en cocina y la disponibilidad real de cada plato por turno de atención.
+          </p>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+          <label for="filtro-fecha" class="small fw-semibold text-muted-fc mb-0">Fecha:</label>
+          <select
+            id="filtro-fecha"
+            v-model="fechaFiltro"
+            class="form-select form-select-sm"
+            style="min-width: 170px; background-color: var(--surface); color: var(--ink); border-color: var(--line); border-radius: 9999px; padding: 0.4rem 1rem;"
+          >
+            <option :value="fechaHoy">Hoy ({{ fechaHoy }})</option>
+            <option value="">Todas las fechas</option>
+          </select>
+        </div>
       </div>
 
-      <!-- 3 Tarjetas de resumen estilo React HomePage -->
+      <!-- 3 Tarjetas de resumen -->
       <div class="row g-3 mb-4">
         <div class="col-md-4">
           <div class="fc-card p-3 h-100">
-            <span class="text-muted-fc small fw-semibold">🍽️ Platos monitoreados</span>
-            <p class="fs-4 fw-bold mb-0 mt-1">{{ platos.length }} platos en menú</p>
+            <span class="text-muted-fc small fw-semibold">🍽️ Platos disponibles</span>
+            <p class="fs-4 fw-bold mb-0 mt-1">{{ platosDisponibles }} de {{ platos.length }} platos</p>
           </div>
         </div>
         <div class="col-md-4">
           <div class="fc-card p-3 h-100">
-            <span class="text-muted-fc small fw-semibold">⏱️ Frecuencia de refresco</span>
-            <p class="fs-4 fw-bold mb-0 mt-1 text-brand">Cada 30 segundos</p>
+            <span class="text-muted-fc small fw-semibold">👨‍🍳 Pedidos activos ({{ etiquetaFecha }})</span>
+            <p class="fs-4 fw-bold mb-0 mt-1 text-brand">{{ pedidosActivos.length }} órdenes</p>
           </div>
         </div>
         <div class="col-md-4">
           <div class="fc-card p-3 h-100">
-            <span class="text-muted-fc small fw-semibold">📦 Órdenes registradas hoy</span>
-            <p class="fs-4 fw-bold mb-0 mt-1" style="color: var(--moss);">{{ pedidos.length }} pedidos</p>
+            <span class="text-muted-fc small fw-semibold">⏱️ Actualización automática</span>
+            <p class="fs-4 fw-bold mb-0 mt-1" style="color: var(--moss);">Cada 30 segundos</p>
           </div>
         </div>
       </div>
@@ -86,14 +102,13 @@
 
       <div v-if="cargando && platos.length === 0" class="text-center py-5">
         <div class="spinner-border text-warning mb-3" role="status"></div>
-        <p class="text-muted-fc">Cargando grilla de disponibilidad...</p>
+        <p class="text-muted-fc">Cargando pantalla de cafetería...</p>
       </div>
 
-      <GrillaDisponibilidad
-        v-else
-        :platos="platos"
-        :pedidos="pedidos"
-      />
+      <template v-else>
+        <MonitorPedidos :pedidos="pedidosFiltradosFecha" :platos="platos" />
+        <GrillaDisponibilidad :platos="platos" :pedidos="pedidosFiltradosFecha" />
+      </template>
     </main>
 
     <footer class="py-3 text-center border-top small text-muted-fc" style="border-color: var(--line) !important;">
@@ -103,11 +118,20 @@
 </template>
 
 <script>
+import MonitorPedidos from './components/MonitorPedidos.vue';
 import GrillaDisponibilidad from './components/GrillaDisponibilidad.vue';
+
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+const TEMA_KEY = 'foodcampus_tema';
+
+function obtenerHoyIso() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
 
 export default {
   name: 'App',
-  components: { GrillaDisponibilidad },
+  components: { MonitorPedidos, GrillaDisponibilidad },
   data() {
     return {
       platos: [],
@@ -117,13 +141,34 @@ export default {
       temporizador: null,
       horaUltimaActualizacion: '--:--:--',
       esOscuro: false,
+      fechaHoy: obtenerHoyIso(),
+      fechaFiltro: '',
     };
   },
+  computed: {
+    platosDisponibles() {
+      return this.platos.filter((p) => p.estado === 'disponible').length;
+    },
+    pedidosFiltradosFecha() {
+      if (!this.fechaFiltro) return this.pedidos;
+      return this.pedidos.filter((p) => p.fecha === this.fechaFiltro);
+    },
+    pedidosActivos() {
+      return this.pedidosFiltradosFecha.filter((p) => p.estado !== 'rechazada');
+    },
+    etiquetaFecha() {
+      return this.fechaFiltro ? 'hoy' : 'todas las fechas';
+    },
+  },
   mounted() {
+    try {
+      this.esOscuro = localStorage.getItem(TEMA_KEY) === 'dark';
+    } catch {
+      this.esOscuro = false;
+    }
+    this.aplicarTema();
     this.cargarDatos();
-    this.temporizador = setInterval(() => {
-      this.cargarDatos(true);
-    }, 30000);
+    this.temporizador = setInterval(() => this.cargarDatos(true), 30000);
   },
   beforeUnmount() {
     if (this.temporizador) {
@@ -132,20 +177,28 @@ export default {
     }
   },
   methods: {
+    aplicarTema() {
+      const tema = this.esOscuro ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-bs-theme', tema);
+      document.documentElement.classList.toggle('dark', this.esOscuro);
+    },
     alternarTema() {
       this.esOscuro = !this.esOscuro;
-      document.documentElement.setAttribute('data-bs-theme', this.esOscuro ? 'dark' : 'light');
+      this.aplicarTema();
+      try {
+        localStorage.setItem(TEMA_KEY, this.esOscuro ? 'dark' : 'light');
+      } catch {}
     },
     async cargarDatos(silencioso = false) {
       if (!silencioso) this.cargando = true;
       this.error = null;
       try {
         const [resPlatos, resPedidos] = await Promise.all([
-          fetch('http://localhost:3000/platos'),
-          fetch('http://localhost:3000/pedidos'),
+          fetch(`${API_URL}/platos`),
+          fetch(`${API_URL}/pedidos`),
         ]);
         if (!resPlatos.ok || !resPedidos.ok) {
-          throw new Error('No se pudo conectar con la API REST en http://localhost:3000.');
+          throw new Error(`No se pudo conectar con la API REST en ${API_URL}.`);
         }
         this.platos = await resPlatos.json();
         this.pedidos = await resPedidos.json();

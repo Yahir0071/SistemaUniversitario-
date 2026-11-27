@@ -7,16 +7,10 @@ import { ResumenPedidoCard } from './ResumenPedidoCard.jsx';
 import { TicketConfirmado } from './TicketConfirmado.jsx';
 import { obtenerImagenPlato } from '../data/platosImagenes.js';
 
-const estadoInicial = (platos = [], platoId = '', cantidad = 1) => {
-  const primeroDisponible = platos.find((p) => new Plato(p).estaDisponible)?.id;
-  return {
-    platoId: platoId ? String(platoId) : (primeroDisponible ? String(primeroDisponible) : ''),
-    fecha: '',
-    hora: '',
-    cantidad: Number(cantidad) || 1,
-    notas: '',
-  };
-};
+const estadoInicial = (platos = [], platoId = '', cantidad = 1) => ({
+  platoId: platoId ? String(platoId) : String(platos.find((p) => new Plato(p).estaDisponible)?.id || ''),
+  fecha: '', hora: '', cantidad: Number(cantidad) || 1, notas: '',
+});
 
 export function FormularioPedido({ platos, pedidosUsuario, usuarioId, platoInicialId = '', cantidadInicial = 1, onGuardar, guardando }) {
   const [form, setForm] = useState(() => estadoInicial(platos, platoInicialId, cantidadInicial));

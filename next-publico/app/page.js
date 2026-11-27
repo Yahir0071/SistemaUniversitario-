@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import { categoriasUnicas } from '../src/core/estadisticas.js';
 
 export const dynamic = 'force-dynamic';
+const API_URL = (process.env.API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
 export const metadata = {
   title: 'Inicio - FoodCampus Público SSR',
@@ -11,7 +13,7 @@ const ICONOS_CAT = { Almuerzos: '🍽️', Desayunos: '☕', Snacks: '🍔', Sal
 
 async function obtenerPlatos() {
   try {
-    const res = await fetch('http://localhost:3000/platos', { cache: 'no-store' });
+    const res = await fetch(`${API_URL}/platos`, { cache: 'no-store' });
     if (!res.ok) return [];
     return await res.json();
   } catch {
@@ -22,7 +24,7 @@ async function obtenerPlatos() {
 export default async function HomePage() {
   const platos = await obtenerPlatos();
   const disponibles = platos.filter((p) => p.estado === 'disponible').length;
-  const categorias = [...new Set(platos.map((p) => p.categoria))];
+  const categorias = categoriasUnicas(platos);
 
   return (
     <div className="container py-4">
@@ -82,7 +84,7 @@ export default async function HomePage() {
           <div className="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-2 mb-4">
             {categorias.map((cat) => (
               <div className="col" key={cat}>
-                <Link href="/platos" className="fc-card fc-card-hover p-3 text-center d-block text-decoration-none" style={{ color: 'var(--ink)' }}>
+                <Link href={`/platos?categoria=${encodeURIComponent(cat)}`} className="fc-card fc-card-hover p-3 text-center d-block text-decoration-none" style={{ color: 'var(--ink)' }}>
                   <div className="fs-3 mb-1">{ICONOS_CAT[cat] ?? '🍴'}</div>
                   <div className="fw-semibold small">{cat}</div>
                   <div className="text-muted-fc" style={{ fontSize: '0.75rem' }}>

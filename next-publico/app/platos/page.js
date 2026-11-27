@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import { categoriasUnicas } from '../../src/core/estadisticas.js';
 
 export const dynamic = 'force-dynamic';
+const API_URL = (process.env.API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
 export const metadata = {
   title: 'Catálogo Público - FoodCampus SSR',
@@ -25,7 +27,7 @@ function obtenerImagen(id, urlOpcional) {
 
 async function obtenerPlatos() {
   try {
-    const res = await fetch('http://localhost:3000/platos', { cache: 'no-store' });
+    const res = await fetch(`${API_URL}/platos`, { cache: 'no-store' });
     if (!res.ok) throw new Error('Error al consultar el catálogo');
     return await res.json();
   } catch (error) {
@@ -34,12 +36,15 @@ async function obtenerPlatos() {
   }
 }
 
-export default async function PlatosPage() {
+export default async function PlatosPage({ searchParams }) {
+  const { categoria = '' } = (await searchParams) || {};
   const platos = await obtenerPlatos();
+  const categorias = categoriasUnicas(platos);
+  const platosFiltrados = categoria ? platos.filter((p) => p.categoria === categoria) : platos;
 
   return (
     <div className="container py-4">
-      <div className="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+      <div className="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
         <div>
           <span className="text-uppercase fw-bold small text-brand" style={{ letterSpacing: '0.06em' }}>
             Menú de la cafetería (Renderizado SSR)
@@ -47,12 +52,29 @@ export default async function PlatosPage() {
           <h1 className="h2 fw-bold m-0" style={{ letterSpacing: '-0.02em' }}>Catálogo Público</h1>
         </div>
         <span className="text-muted-fc small fw-medium">
-          {platos.length} platos en carta
+          {platosFiltrados.length} platos {categoria ? `en ${categoria}` : 'en carta'}
         </span>
       </div>
 
+      {categorias.length > 0 && (
+        <div className="d-flex flex-wrap gap-2 mb-4">
+          <Link href="/platos" className={`fc-chip ${!categoria ? 'active' : ''}`}>
+            Todos ({platos.length})
+          </Link>
+          {categorias.map((cat) => (
+            <Link
+              key={cat}
+              href={`/platos?categoria=${encodeURIComponent(cat)}`}
+              className={`fc-chip ${categoria === cat ? 'active' : ''}`}
+            >
+              {cat} ({platos.filter((p) => p.categoria === cat).length})
+            </Link>
+          ))}
+        </div>
+      )}
+
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-        {platos.map((plato) => (
+        {platosFiltrados.map((plato) => (
           <div className="col" key={plato.id}>
             <div className={`fc-card fc-card-hover h-100 overflow-hidden d-flex flex-column ${plato.estado !== 'disponible' ? 'opacity-75' : ''}`}>
               <Link href={`/platos/${plato.id}`} className="fc-img-box d-block text-decoration-none">
@@ -80,16 +102,16 @@ export default async function PlatosPage() {
                 </p>
 
                 <Link href={`/platos/${plato.id}`} className="btn btn-sm fc-btn-secondary w-100 py-2">
-                  Ver detalle e ingredientes (SSR) →
+                  Ver detalle e ingredientes →
                 </Link>
               </div>
             </div>
           </div>
         ))}
 
-        {platos.length === 0 && (
+        {platosFiltrados.length === 0 && (
           <div className="col-12 text-center py-5">
-            <p className="text-muted-fc">No se pudo cargar el catálogo o la API no está disponible en http://localhost:3000.</p>
+            <p className="text-muted-fc">No hay platos para mostrar en esta categoría o la API no está disponible.</p>
           </div>
         )}
       </div>

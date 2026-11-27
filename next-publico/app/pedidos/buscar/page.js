@@ -46,7 +46,7 @@ export default function BuscarPedidoPage() {
           </button>
         </form>
 
-        <div className="mt-4 pt-3 border-top text-center" style={{ borderColor: 'var(--line) !important;' }}>
+        <div className="mt-4 pt-3 border-top text-center" style={{ borderColor: 'var(--line)' }}>
           <span className="small d-block mb-2" style={{ color: 'var(--ink-muted)' }}>Órdenes de demostración para probar:</span>
           <div className="d-flex justify-content-center gap-2">
             <Link href="/pedidos/PED-0001" className="fc-pill-badge text-decoration-none" style={{ color: 'var(--brand)', fontFamily: 'monospace' }}>PED-0001</Link>
